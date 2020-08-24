@@ -20,13 +20,11 @@
 
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
   <a class="navbar-brand" href="#">Navbar</a>
-
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
     <span class="navbar-toggler-icon"></span>
   </button>
-
   <div class="collapse navbar-collapse" id="collapsibleNavbar">
-    <ul class="nav navbar-nav navbar-right">
+    <ul class="navbar-nav navbar-right">
       <li class="nav-item">
         <a class="nav-link" href="#">Link</a>
       </li>
@@ -48,9 +46,5 @@
   <p>Tip: You can also remove the .navbar-expand-md class to ALWAYS hide navbar links and display the toggler button.</p>
 </div>
 
-
-<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
-<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<script src="resources/js/bootstrap.js"></script>
 </body>
 </html>
