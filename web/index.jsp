@@ -1,53 +1,109 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: HP
-  Date: 24.08.2020
-  Time: 16:57
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html lang="en">
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
 <head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <title>Forum</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+  <link href="${pageContext.request.contextPath}/resources/css/styles.css" type="text/css" rel="stylesheet">
 </head>
+
 <body>
 
-<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-  <a class="navbar-brand" href="#">Navbar</a>
+<nav class = "navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <a href="#" class="navbar-brand">Forum</a>
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+    <button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse">
+      <span class="glyphicon glyphicon-list"></span>
+    </button>
 
-  <div class="collapse navbar-collapse" id="collapsibleNavbar">
-    <ul class="nav navbar-nav navbar-right">
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-    </ul>
+    <div class="collapse navbar-collapse navHeaderCollapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Główna</a></li>
+        <li><a href="#">Dodaj</a></li>
+        <li><a href="#">Zaloguj się</a></li>
+      </ul>
+    </div>
+
+
   </div>
 </nav>
-<br>
 
 <div class="container">
-  <h3>Collapsible Navbar</h3>
-  <p>In this example, the navigation bar is hidden on small screens and replaced by a button in the top right corner (try to re-size this window).</p>
-  <p>Only when the button is clicked, the navigation bar will be displayed.</p>
-  <p>Tip: You can also remove the .navbar-expand-md class to ALWAYS hide navbar links and display the toggler button.</p>
+  <div class="row bs-callout bs-callout-warning">
+    <div class="col col-md-1 col-sm-2">
+      <a href="#" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
+      <div class="well well-sm centered"><p style="text-align: center">12</div>
+      <a href="#" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
+    </div>
+    <div class="col col-md-11 col-sm-10">
+      <h3 class="centered"><a href="#">Post</a></h3>
+      <h6><small style="color:#171716">Dodane przez: Dawid 24.08.2020</small></h6>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <button class="btn btn-info btn-xs">Przejdź do strony</button>
+    </div>
+  </div>
+
+
+  <div class="row bs-callout bs-callout-warning">
+    <div class="col col-md-1 col-sm-2">
+      <a href="#" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
+      <div class="well well-sm centered"><p style="text-align: center">12</div>
+      <a href="#" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
+    </div>
+    <div class="col col-md-11 col-sm-10">
+      <h3 class="centered"><a href="#">Post</a></h3>
+      <h6><small style="color:#171716">Dodane przez: Dawid 24.08.2020</small></h6>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <button class="btn btn-info btn-xs">Przejdź do strony</button>
+    </div>
+  </div>
+
+
+  <div class="row bs-callout bs-callout-warning">
+    <div class="col col-md-1 col-sm-2">
+      <a href="#" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
+      <div class="well well-sm centered"><p style="text-align: center">12</div>
+      <a href="#" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
+    </div>
+    <div class="col col-md-11 col-sm-10">
+      <h3 class="centered"><a href="#">Post</a></h3>
+      <h6><small style="color:#171716">Dodane przez: Dawid 24.08.2020</small></h6>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <button class="btn btn-info btn-xs">Przejdź do strony</button>
+    </div>
+  </div>
+
+
+  <div class="row bs-callout bs-callout-warning">
+    <div class="col col-md-1 col-sm-2">
+      <a href="#" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
+      <div class="well well-sm centered"><p style="text-align: center">12</div>
+      <a href="#" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
+    </div>
+    <div class="col col-md-11 col-sm-10">
+      <h3 class="centered"><a href="#">Post</a></h3>
+      <h6 ><small style="color:#171716">Dodane przez: Dawid 24.08.2020</small></h6>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <button class="btn btn-info btn-xs">Przejdź do strony</button>
+    </div>
+  </div>
 </div>
 
+
+
+<footer class="footer">
+  <div class="container">
+    <p class="navbar-text">Forum - developed by <a href="https://github.com/DaDudek">Dawid Dudek</a></p>
+  </div>
+</footer>
 
 <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
