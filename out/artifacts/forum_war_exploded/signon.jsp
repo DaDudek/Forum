@@ -22,7 +22,7 @@
 
         <div class="collapse navbar-collapse navHeaderCollapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Główna</a></li>
+                <li><a href="index.jsp">Główna</a></li>
                 <li><a href="#">Dodaj</a></li>
                 <li><a href="#">Zaloguj się</a></li>
             </ul>
@@ -34,7 +34,7 @@
 
 <div class="container">
     <div class="col-sm-6 col-md-4 col-md-offset-4">
-        <form class="form-signin" method="post" action="#">
+        <form class="form-signin" method="post" action="sign-on">
             <h2 class="form-signin-heading">sign on</h2>
             <input name="inputEmail" type="email" class="form-control" placeholder="Email" required autofocus />
             <input name="inputUsername" type="text" name="inputUsername" class="form-control" placeholder="Username" required autofocus />
