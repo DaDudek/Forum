@@ -1,4 +1,4 @@
-package filter;
+package forum.filter;
 
 import forum.model.User;
 import forum.service.UserService;

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,7 +25,14 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#">Główna</a></li>
                 <li><a href="#">Dodaj</a></li>
-                <li><a href="#">Zaloguj się</a></li>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.user}">
+                        <li><a href="${pageContext.request.contextPath}/logout">Wyloguj się</a></li>
+                    </c:when>
+                    <c:otherwise>
+                        <li><a href="${pageContext.request.contextPath}/login">Zaloguj się</a></li>
+                    </c:otherwise>
+                </c:choose>
             </ul>
         </div>
 
@@ -33,7 +41,7 @@
 </nav>
 <div class="container">
     <div class="col-md-8 col-md-offset-2">
-        <form class="form-signin" method="post" action="new">
+        <form class="form-signin" method="post" action="new-post">
             <h2 class="form-signin-heading">Dodaj nowe znalezisko</h2>
             <input name="inputTitle" type="text" class="form-control" placeholder="post title max 60 character"
                    required autofocus />

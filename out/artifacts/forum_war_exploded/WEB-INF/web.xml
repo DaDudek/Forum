@@ -9,8 +9,9 @@
         <web-resource-collection>
             <web-resource-name>Auth</web-resource-name>
             <description>Resources that can be accessed after login</description>
-            <url-pattern>/add</url-pattern>
+            <url-pattern>/new-post</url-pattern>
             <url-pattern>/sign-in</url-pattern>
+            <url-pattern>/addpost.jsp</url-pattern>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
         </web-resource-collection>

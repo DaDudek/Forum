@@ -1,4 +1,4 @@
-package controller;
+package forum.controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

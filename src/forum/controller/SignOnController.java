@@ -1,4 +1,4 @@
-package controller;
+package forum.controller;
 
 import forum.service.UserService;
 
