@@ -25,6 +25,18 @@ public class PostService {
         return postDAO.getAll(PostSort.valueOf(postSort));
     }
 
+    public Post readPost(int postId){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        PostDAO postDAO = factory.getPostDAO();
+        return postDAO.read(postId);
+    }
+
+    public boolean updatePost(Post post){
+        DAOFactory factory =DAOFactory.getDAOFactory();
+        PostDAO postDAO = factory.getPostDAO();
+        return postDAO.update(post);
+    }
+
     private Post initializePost(String title, String description, String message, User user){
         Post post = new Post();
         post.setTitle(title);

@@ -16,6 +16,10 @@ public class Post {
     public Post() {
     }
 
+    public Post(int postId){
+        this.postId = postId;
+    }
+
     public Post(Post post){
         this.postId = post.getPostId();
         this.user = new User(post.getUser());

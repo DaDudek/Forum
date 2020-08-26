@@ -12,6 +12,10 @@ public class User {
     public User() {
     }
 
+    public User(int userId){
+        this.userId = userId;
+    }
+
     public User(User user){
         this.userId = user.getUserId();
         this.username = user.getUsername();

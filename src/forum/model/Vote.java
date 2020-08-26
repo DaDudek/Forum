@@ -15,10 +15,20 @@ public class Vote {
 
     public Vote(Vote vote) {
         this.voteId = vote.getVoteId();
+        System.out.println("test1");
         this.post = new Post(vote.getPost());
+        System.out.println("test1");
         this.user = new User(vote.getUser());
+        System.out.println("test1");
         this.date = new Timestamp(vote.getDate().getTime());
         this.isPositive = vote.isPositive();
+    }
+
+    public Vote(int postId, int userId, boolean isPositive, Timestamp timestamp){
+        this.post = new Post(postId);
+        this.user = new User(userId);
+        this.isPositive = isPositive;
+        this.date = timestamp;
     }
 
     public int getVoteId() {
