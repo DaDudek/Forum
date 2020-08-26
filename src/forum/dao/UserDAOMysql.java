@@ -2,12 +2,16 @@ package forum.dao;
 
 import forum.model.User;
 import forum.util.ConnectionProvider;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserDAOMysql implements UserDAO {
@@ -15,6 +19,10 @@ public class UserDAOMysql implements UserDAO {
             "INSERT INTO user(username, email, account_active, password) VALUES(:username, :email, :accountActive, :password)";
     private static final String SET_ROLE =
             "INSERT INTO user_role(username) VALUES(:username)";
+    private static final String READ =
+            "SELECT user_id, username, email, password, account_active FROM user WHERE user_id = :userId";
+    private static final String READ_BY_USERNAME =
+            "SELECT user_id, username, email, password, account_active FROM user WHERE username = :username";
 
 
 
@@ -36,7 +44,9 @@ public class UserDAOMysql implements UserDAO {
 
     @Override
     public User read(Integer primaryKey) {
-        return null;
+        SqlParameterSource parameterSource = new MapSqlParameterSource("userId", primaryKey);
+        return template.queryForObject(READ, parameterSource, new UserRowMapper());
+
     }
 
     @Override
@@ -54,8 +64,28 @@ public class UserDAOMysql implements UserDAO {
         return null;
     }
 
+    public User readByUsername(String username){
+        SqlParameterSource parameterSource = new MapSqlParameterSource("username", username);
+        return template.queryForObject(READ_BY_USERNAME,parameterSource,new UserRowMapper());
+    }
+
     private void setRole(User user){
         SqlParameterSource source = new BeanPropertySqlParameterSource(user);
         template.update(SET_ROLE, source);
+    }
+
+    private class UserRowMapper implements RowMapper<User> {
+
+        @Override
+        public User mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+            User user = new User();
+            user.setUserId(resultSet.getInt("user_id"));
+            user.setUsername(resultSet.getString("username"));
+            user.setEmail(resultSet.getString("email"));
+            user.setPassword(resultSet.getString("password"));
+            user.setAccountActive(resultSet.getBoolean("account_active"));
+            return user;
+        }
+
     }
 }
