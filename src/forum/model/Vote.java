@@ -5,8 +5,8 @@ import java.util.Objects;
 
 public class Vote {
     private int voteId;
-    private Post post;
-    private User user;
+    private int postId;
+    private int userId;
     private Timestamp date;
     private boolean isPositive;
 
@@ -15,21 +15,12 @@ public class Vote {
 
     public Vote(Vote vote) {
         this.voteId = vote.getVoteId();
-        System.out.println("test1");
-        this.post = new Post(vote.getPost());
-        System.out.println("test1");
-        this.user = new User(vote.getUser());
-        System.out.println("test1");
+        this.postId = vote.getPostId();
+        this.userId = vote.getUserId();
         this.date = new Timestamp(vote.getDate().getTime());
         this.isPositive = vote.isPositive();
     }
 
-    public Vote(int postId, int userId, boolean isPositive, Timestamp timestamp){
-        this.post = new Post(postId);
-        this.user = new User(userId);
-        this.isPositive = isPositive;
-        this.date = timestamp;
-    }
 
     public int getVoteId() {
         return voteId;
@@ -39,20 +30,20 @@ public class Vote {
         this.voteId = voteId;
     }
 
-    public Post getPost() {
-        return post;
+    public int getPostId() {
+        return postId;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
+    public void setPostId(int postId) {
+        this.postId = postId;
     }
 
-    public User getUser() {
-        return user;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public Timestamp getDate() {
@@ -77,23 +68,23 @@ public class Vote {
         if (o == null || getClass() != o.getClass()) return false;
         Vote vote = (Vote) o;
         return voteId == vote.voteId &&
+                postId == vote.postId &&
+                userId == vote.userId &&
                 isPositive == vote.isPositive &&
-                Objects.equals(post, vote.post) &&
-                Objects.equals(user, vote.user) &&
                 Objects.equals(date, vote.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(voteId, post, user, date, isPositive);
+        return Objects.hash(voteId, postId, userId, date, isPositive);
     }
 
     @Override
     public String toString() {
         return "Vote{" +
                 "voteId=" + voteId +
-                ", post=" + post +
-                ", user=" + user +
+                ", postId=" + postId +
+                ", userId=" + userId +
                 ", date=" + date +
                 ", isPositive=" + isPositive +
                 '}';

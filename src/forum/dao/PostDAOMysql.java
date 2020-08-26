@@ -34,7 +34,7 @@ public class PostDAOMysql implements PostDAO{
                     "ORDER BY date";
 
     private static final String UPDATE =
-            "UPDATE post SET user_id =:user_id title = :title, description = :description , message = :message , date = :date, " +
+            "UPDATE post SET user_id =:user_id, title = :title, description = :description , message = :message , date = :date, " +
                     "positive_vote = :positive_vote, negative_vote = :negative_vote WHERE post_id = :post_id";
 
     private static final String READ =
@@ -64,12 +64,15 @@ public class PostDAOMysql implements PostDAO{
         map.put("post_id",primaryKey);
         SqlParameterSource parameterSource = new MapSqlParameterSource(map);
         Post post = template.queryForObject(READ,parameterSource, new PostRowMapper());
+        System.out.println(post.getDescription());
         return post;
     }
 
     @Override
     public boolean update(Post updateObject) {
         Map<String, Object> map = mapPost(updateObject);
+        System.out.println("tutaj");
+        System.out.println(updateObject);
         SqlParameterSource parameterSource = new MapSqlParameterSource(map);
         if (template.update(UPDATE, parameterSource) == 1){
             return true;
@@ -104,6 +107,7 @@ public class PostDAOMysql implements PostDAO{
         map.put("date", post.getDate());
         map.put("positive_vote", post.getPositiveVote());
         map.put("negative_vote", post.getNegativeVote());
+        map.put("post_id", post.getPostId());
         return map;
     }
 
@@ -118,6 +122,7 @@ public class PostDAOMysql implements PostDAO{
             post.setDate(resultSet.getTimestamp("date"));
             post.setPositiveVote(resultSet.getInt("positive_vote"));
             post.setNegativeVote(resultSet.getInt("negative_vote"));
+            post.setDescription(resultSet.getString("description"));
             User user = new User();
             user.setUserId(resultSet.getInt("user_id"));
             user.setUsername(resultSet.getString("username"));

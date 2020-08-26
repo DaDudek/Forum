@@ -34,14 +34,14 @@ public class VoteController extends HttpServlet {
         VoteService voteService = new VoteService();
         Vote pastVote = voteService.getVoteByIds(postId,userId);
         Vote newVote = voteService.createOrUpdateVote(postId,userId, isPositive);
-        if (!pastVote.equals(newVote)){
-            updatePost(postId,pastVote,newVote);
-        }
+        updatePost(postId, pastVote, newVote);
+
     }
 
     private void updatePost(int postId, Vote pastVote, Vote newVote){
         PostService postService = new PostService();
         Post post =postService.readPost(postId);
+        System.out.println(post);
         Post updatedPost = null;
         if (pastVote == null && newVote != null){
             updatedPost = addVote(post, newVote.isPositive());
@@ -49,6 +49,7 @@ public class VoteController extends HttpServlet {
             updatedPost = removeVote(post, pastVote.isPositive());
             updatedPost = addVote(updatedPost, newVote.isPositive());
         }
+        postService.updatePost(updatedPost);
     }
 
     private Post addVote(Post post, boolean isPositive) {

@@ -26,9 +26,13 @@ public class VoteService {
     }
 
     private Vote createVote(int postId, int userId, boolean isPositive){
-        Vote vote = new Vote(postId,userId,isPositive,new Timestamp(new Date().getTime()));
+        Vote vote = new Vote();
         DAOFactory factory = DAOFactory.getDAOFactory();
         VoteDAO voteDAO = factory.getVoteDAO();
+        vote.setPostId(postId);
+        vote.setUserId(userId);
+        vote.setPositive(isPositive);
+        vote.setDate(new Timestamp(new Date().getTime()));
         return voteDAO.create(vote);
     }
 
@@ -36,10 +40,8 @@ public class VoteService {
         DAOFactory factory = DAOFactory.getDAOFactory();
         VoteDAO voteDAO = factory.getVoteDAO();
         Vote vote = voteDAO.getVoteByIds(postId,userId);
-        if (vote != null){
-            vote.setPositive(isPositive);
-            voteDAO.update(vote);
-        }
+        vote.setPositive(isPositive);
+        voteDAO.update(vote);
         return vote;
     }
 
