@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,72 +40,25 @@
 
   </div>
 </nav>
-
+<c:if test="${not empty requestScope.posts}">
+<c:forEach var="post" items="${requestScope.posts}">
 <div class="container">
   <div class="row bs-callout bs-callout-warning">
     <div class="col col-md-1 col-sm-2">
       <a href="#" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
-      <div class="well well-sm centered"><p style="text-align: center">12</div>
+      <div class="well well-sm centered"><p style="text-align: center"><c:out value="${post.positiveVote - post.negativeVote}" /></div>
       <a href="#" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
     </div>
     <div class="col col-md-11 col-sm-10">
-      <h3 class="centered"><a href="#">Post</a></h3>
-      <h6><small style="color:#171716">Dodane przez: Dawid 24.08.2020</small></h6>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <button class="btn btn-info btn-xs">Przejdź do strony</button>
-    </div>
-  </div>
-
-
-  <div class="row bs-callout bs-callout-warning">
-    <div class="col col-md-1 col-sm-2">
-      <a href="#" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
-      <div class="well well-sm centered"><p style="text-align: center">12</div>
-      <a href="#" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
-    </div>
-    <div class="col col-md-11 col-sm-10">
-      <h3 class="centered"><a href="#">Post</a></h3>
-      <h6><small style="color:#171716">Dodane przez: Dawid 24.08.2020</small></h6>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <button class="btn btn-info btn-xs">Przejdź do strony</button>
-    </div>
-  </div>
-
-
-  <div class="row bs-callout bs-callout-warning">
-    <div class="col col-md-1 col-sm-2">
-      <a href="#" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
-      <div class="well well-sm centered"><p style="text-align: center">12</div>
-      <a href="#" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
-    </div>
-    <div class="col col-md-11 col-sm-10">
-      <h3 class="centered"><a href="#">Post</a></h3>
-      <h6><small style="color:#171716">Dodane przez: Dawid 24.08.2020</small></h6>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <button class="btn btn-info btn-xs">Przejdź do strony</button>
-    </div>
-  </div>
-
-
-  <div class="row bs-callout bs-callout-warning">
-    <div class="col col-md-1 col-sm-2">
-      <a href="#" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
-      <div class="well well-sm centered"><p style="text-align: center">12</div>
-      <a href="#" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
-    </div>
-    <div class="col col-md-11 col-sm-10">
-      <h3 class="centered"><a href="#">Post</a></h3>
-      <h6 ><small style="color:#171716">Dodane przez: Dawid 24.08.2020</small></h6>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <h3 class="centered"><a href="#"><c:out value="${post.title}" /></a></h3>
+      <h6><small style="color:#171716">Dodane przez: <c:out value="${post.user.username}" />  <fmt:formatDate value="${post.date}" pattern="dd/MM/YYYY"/></small></h6>
+      <p> <c:out value="${post.description}" /></p>
       <button class="btn btn-info btn-xs">Przejdź do strony</button>
     </div>
   </div>
 </div>
-
+  </c:forEach>
+  </c:if>
 
 
 <footer class="footer">

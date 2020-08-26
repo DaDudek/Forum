@@ -3,10 +3,12 @@ package forum.service;
 import forum.dao.DAOFactory;
 import forum.dao.PostDAO;
 import forum.model.Post;
+import forum.model.PostSort;
 import forum.model.User;
 
 import java.util.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class PostService {
 
@@ -15,6 +17,12 @@ public class PostService {
         DAOFactory factory = DAOFactory.getDAOFactory();
         PostDAO postDAO = factory.getPostDAO();
         postDAO.create(post);
+    }
+
+    public List<Post> readPosts(String postSort){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        PostDAO postDAO = factory.getPostDAO();
+        return postDAO.getAll(PostSort.valueOf(postSort));
     }
 
     private Post initializePost(String title, String description, String message, User user){

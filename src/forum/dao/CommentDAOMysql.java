@@ -24,9 +24,4 @@ public class CommentDAOMysql  implements CommentDAO{
     public boolean delete(Integer key) {
         return false;
     }
-
-    @Override
-    public List<Comment> getAll() {
-        return null;
-    }
 }

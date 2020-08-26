@@ -59,11 +59,6 @@ public class UserDAOMysql implements UserDAO {
         return false;
     }
 
-    @Override
-    public List<User> getAll() {
-        return null;
-    }
-
     public User readByUsername(String username){
         SqlParameterSource parameterSource = new MapSqlParameterSource("username", username);
         return template.queryForObject(READ_BY_USERNAME,parameterSource,new UserRowMapper());

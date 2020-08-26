@@ -10,5 +10,4 @@ public interface GenericDAO <T, PK extends Serializable> {
     T read(PK primaryKey);
     boolean update(T updateObject);
     boolean delete(PK key);
-    List<T> getAll();
 }

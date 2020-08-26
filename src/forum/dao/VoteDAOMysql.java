@@ -25,8 +25,4 @@ public class VoteDAOMysql implements VoteDAO{
         return false;
     }
 
-    @Override
-    public List<Vote> getAll() {
-        return null;
-    }
 }
