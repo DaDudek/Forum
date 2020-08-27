@@ -19,7 +19,7 @@
         <form class="form-signin" method="post" action="sign-on">
             <h2 class="form-signin-heading">sign on</h2>
             <input name="inputEmail" type="email" class="form-control" placeholder="Email" required autofocus />
-            <input name="inputUsername" type="text" name="inputUsername" class="form-control" placeholder="Username" required autofocus />
+            <input name="inputUsername" type="text" class="form-control" placeholder="Username" required autofocus />
             <input name="inputPassword" type="password" class="form-control" placeholder="Password" required />
             <button class="btn btn-lg btn-primary btn-block" type="submit" >Sign on</button>
         </form>
