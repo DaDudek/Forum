@@ -26,10 +26,10 @@
       <a href="${pageContext.request.contextPath}/vote?post_id=${post.postId}&is_positive=false" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
     </div>
     <div class="col col-md-11 col-sm-10">
-      <h3 class="centered"><a href="#"><c:out value="${post.title}" /></a></h3>
+      <h3 class="centered"><a href="${pageContext.request.contextPath}/post?post-id=${post.postId}"><c:out value="${post.title}" /></a></h3>
       <h6><small style="color:#171716">Dodane przez: <c:out value="${post.user.username}" />  <fmt:formatDate value="${post.date}" pattern="dd/MM/YYYY"/></small></h6>
       <p> <c:out value="${post.description}" /></p>
-      <button class="btn btn-info btn-xs">Przejdź do strony</button>
+      <a href="${pageContext.request.contextPath}/post?post-id=${post.postId}"><button class="btn btn-info btn-xs">Przejdź do strony</button></a>
     </div>
   </div>
 </div>
