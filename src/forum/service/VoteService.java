@@ -3,6 +3,7 @@ package forum.service;
 import forum.dao.DAOFactory;
 import forum.dao.VoteDAO;
 import forum.model.Vote;
+import forum.model.VoteType;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -33,6 +34,11 @@ public class VoteService {
         vote.setUserId(userId);
         vote.setPositive(isPositive);
         vote.setDate(new Timestamp(new Date().getTime()));
+        if (isPositive){
+            vote.setVoteType(VoteType.POSITIVE);
+        }else {
+            vote.setVoteType(VoteType.NEGATIVE);
+        };
         return voteDAO.create(vote);
     }
 
@@ -41,8 +47,39 @@ public class VoteService {
         VoteDAO voteDAO = factory.getVoteDAO();
         Vote vote = voteDAO.getVoteByIds(postId,userId);
         vote.setPositive(isPositive);
+        vote.setVoteType(updateVoteType(vote));
         voteDAO.update(vote);
         return vote;
     }
 
+    private VoteType updateVoteType(Vote vote){
+        VoteType voteType = null;
+        switch (vote.getVoteType()){
+            case POSITIVE:
+                if (vote.isPositive()){
+                    voteType = VoteType.RETURNED;
+                }
+                else {
+                    voteType = VoteType.NEGATIVE;
+                }
+                break;
+            case NEGATIVE:
+                if (vote.isPositive()){
+                    voteType = VoteType.POSITIVE;
+                }
+                else {
+                    voteType = VoteType.RETURNED;
+                }
+                break;
+            case RETURNED:
+                if (vote.isPositive()){
+                    voteType = VoteType.POSITIVE;
+                }
+                else {
+                    voteType = VoteType.NEGATIVE;
+                }
+        }
+        return voteType;
+
+    }
 }

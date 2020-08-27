@@ -1,6 +1,7 @@
 package forum.dao;
 
 import forum.model.Vote;
+import forum.model.VoteType;
 import forum.util.ConnectionProvider;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,15 +18,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class VoteDAOMysql implements VoteDAO{
-    private static final String CREATE = "INSERT INTO vote(post_id, user_id, date, is_positive) "
-            + "VALUES (:post_id, :user_id, :date, :is_positive);";
+    private static final String CREATE = "INSERT INTO vote(post_id, user_id, date, is_positive, vote_type) "
+            + "VALUES (:post_id, :user_id, :date, :is_positive, :vote_type);";
 
-    private static final String READ= "SELECT vote_id, post_id, user_id,date, is_positive FROM vote WHERE vote_id = :vode_id";
+    private static final String READ= "SELECT vote_id, post_id, user_id,date, is_positive, vote_type FROM vote WHERE vote_id = :vode_id";
 
-    private static final String READ_VOTE_BY_IDS = "SELECT vote_id, post_id, user_id,date, is_positive " +
+    private static final String READ_VOTE_BY_IDS = "SELECT vote_id, post_id, user_id,date, is_positive, vote_type " +
             "FROM vote WHERE user_id = :user_id AND post_id = :post_id " ;
 
-    private static final String UPDATE = "UPDATE vote SET date=:date, is_positive=:is_positive WHERE vote_id=:vote_id;";
+    private static final String UPDATE = "UPDATE vote SET date=:date, is_positive=:is_positive, vote_type=:vote_type WHERE vote_id=:vote_id;";
 
     private NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
 
@@ -39,6 +40,7 @@ public class VoteDAOMysql implements VoteDAO{
         paramMap.put("user_id", vote.getUserId());
         paramMap.put("date", vote.getDate());
         paramMap.put("is_positive", vote.isPositive());
+        paramMap.put("vote_type",vote.getVoteType().name());
         SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
         if (template.update(CREATE,parameterSource,holder) == 1){
             vote.setVoteId(holder.getKey().intValue());
@@ -61,6 +63,7 @@ public class VoteDAOMysql implements VoteDAO{
         paramMap.put("vote_id", vote.getVoteId());
         paramMap.put("date", vote.getDate());
         paramMap.put("is_positive", vote.isPositive());
+        paramMap.put("vote_type",vote.getVoteType().name());
         SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
         if (template.update(UPDATE,parameterSource) == 1){
             return true;
@@ -97,6 +100,7 @@ public class VoteDAOMysql implements VoteDAO{
             vote.setPositive(resultSet.getBoolean("is_positive"));
             vote.setPostId(resultSet.getInt("post_id"));
             vote.setUserId(resultSet.getInt("user_id"));
+            vote.setVoteType(VoteType.valueOf(resultSet.getString("vote_type")));
             return vote;
         }
     }

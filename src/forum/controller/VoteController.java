@@ -42,34 +42,63 @@ public class VoteController extends HttpServlet {
         PostService postService = new PostService();
         Post post =postService.readPost(postId);
         System.out.println(post);
-        Post updatedPost = null;
-        if (pastVote == null && newVote != null){
-            updatedPost = addVote(post, newVote.isPositive());
-        }else {
-            updatedPost = removeVote(post, pastVote.isPositive());
-            updatedPost = addVote(updatedPost, newVote.isPositive());
-        }
+        Post updatedPost = choosePostUpdateOption(post, pastVote, newVote);
         postService.updatePost(updatedPost);
     }
 
-    private Post addVote(Post post, boolean isPositive) {
-        Post newPost = new Post(post);
-        if(isPositive) {
-            newPost.setPositiveVote(newPost.getPositiveVote() + 1);
-        } else{
-            newPost.setNegativeVote(newPost.getNegativeVote() + 1);
+    private Post choosePostUpdateOption(Post post, Vote pastVote, Vote newVote){
+        if (pastVote == null && newVote != null){
+            return updatePostWithNullVote(post, newVote.isPositive());
         }
-        return newPost;
+        switch (pastVote.getVoteType()){
+            case POSITIVE:
+                return updatePostWithPositiveVote(post, newVote.isPositive());
+            case RETURNED:
+                return updatePostWithReturnedVote(post, newVote.isPositive());
+            case NEGATIVE:
+                return updatePostWithNegativeVote(post,newVote.isPositive());
+        }
+        return null;
     }
 
-    private Post removeVote(Post post, boolean isPositive) {
-        Post newPost = new Post(post);
-        if(isPositive) {
-            newPost.setPositiveVote(newPost.getPositiveVote() - 1);
-        } else{
-            newPost.setNegativeVote(newPost.getNegativeVote() - 1);
+    private Post updatePostWithNullVote(Post post, boolean isPositive){
+        if (isPositive){
+            post.setPositiveVote(post.getPositiveVote() + 1);
+        }else {
+            post.setNegativeVote(post.getNegativeVote() + 1);
         }
-        return newPost;
+        return post;
+    }
+
+    private Post updatePostWithPositiveVote(Post post, boolean isPositive){
+        if (isPositive){
+            post.setPositiveVote(post.getPositiveVote() - 1);
+        }else {
+            post.setPositiveVote(post.getPositiveVote() - 1);
+            post.setNegativeVote(post.getNegativeVote() + 1);
+        }
+        return post;
+    }
+
+    private Post updatePostWithNegativeVote(Post post, boolean isPositive){
+        if (isPositive){
+            post.setPositiveVote(post.getPositiveVote() + 1);
+            post.setNegativeVote(post.getNegativeVote() - 1);
+        }
+        else {
+            post.setNegativeVote(post.getNegativeVote() - 1);
+        }
+        return post;
+    }
+
+    private Post updatePostWithReturnedVote(Post post, boolean isPositive){
+        if (isPositive){
+            post.setPositiveVote(post.getPositiveVote() + 1);
+        }
+        else {
+            post.setNegativeVote(post.getNegativeVote() + 1);
+        }
+        return post;
     }
 }
 

@@ -9,6 +9,7 @@ public class Vote {
     private int userId;
     private Timestamp date;
     private boolean isPositive;
+    private VoteType voteType;
 
     public Vote() {
     }
@@ -19,6 +20,8 @@ public class Vote {
         this.userId = vote.getUserId();
         this.date = new Timestamp(vote.getDate().getTime());
         this.isPositive = vote.isPositive();
+        this.voteType = vote.getVoteType();
+
     }
 
 
@@ -62,6 +65,15 @@ public class Vote {
         isPositive = positive;
     }
 
+    public VoteType getVoteType() {
+        return voteType;
+    }
+
+    public void setVoteType(VoteType voteType) {
+        this.voteType = voteType;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -71,12 +83,13 @@ public class Vote {
                 postId == vote.postId &&
                 userId == vote.userId &&
                 isPositive == vote.isPositive &&
-                Objects.equals(date, vote.date);
+                Objects.equals(date, vote.date) &&
+                voteType == vote.voteType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(voteId, postId, userId, date, isPositive);
+        return Objects.hash(voteId, postId, userId, date, isPositive, voteType);
     }
 
     @Override
@@ -87,6 +100,7 @@ public class Vote {
                 ", userId=" + userId +
                 ", date=" + date +
                 ", isPositive=" + isPositive +
+                ", voteType=" + voteType +
                 '}';
     }
 }
