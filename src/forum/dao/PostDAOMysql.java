@@ -26,12 +26,12 @@ public class PostDAOMysql implements PostDAO{
     private static final String READ_ALL_BY_VOTE =
             "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
                     "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
-                    "ORDER BY (positive_vote - negative_vote)";
+                    "ORDER BY (positive_vote - negative_vote) DESC"; // the best score post will be first;
 
     private static final String READ_ALL_BY_DATE =
             "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
                     "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
-                    "ORDER BY date";
+                    "ORDER BY date DESC"; //the newest post will be first
 
     private static final String UPDATE =
             "UPDATE post SET user_id =:user_id, title = :title, description = :description , message = :message , date = :date, " +
@@ -64,15 +64,12 @@ public class PostDAOMysql implements PostDAO{
         map.put("post_id",primaryKey);
         SqlParameterSource parameterSource = new MapSqlParameterSource(map);
         Post post = template.queryForObject(READ,parameterSource, new PostRowMapper());
-        System.out.println(post.getDescription());
         return post;
     }
 
     @Override
     public boolean update(Post updateObject) {
         Map<String, Object> map = mapPost(updateObject);
-        System.out.println("tutaj");
-        System.out.println(updateObject);
         SqlParameterSource parameterSource = new MapSqlParameterSource(map);
         if (template.update(UPDATE, parameterSource) == 1){
             return true;

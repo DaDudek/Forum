@@ -21,7 +21,7 @@
             <input name="j_username" type="text" class="form-control" placeholder="Username" required autofocus>
             <input name="j_password" type="password" class="form-control" placeholder="Password" required>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-            <a href="#" style="color: black">Sign on</a>
+            <a href="${pageContext.request.contextPath}/sign-on" style="color: black">Sign on</a>
         </form>
     </div>
 </div>

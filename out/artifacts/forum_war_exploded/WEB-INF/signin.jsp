@@ -12,25 +12,7 @@
 
 <body>
 
-<nav class = "navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <a href="#" class="navbar-brand">Forum</a>
-
-        <button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse">
-            <span class="glyphicon glyphicon-list"></span>
-        </button>
-
-        <div class="collapse navbar-collapse navHeaderCollapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Główna</a></li>
-                <li><a href="#">Dodaj</a></li>
-                <li><a href="#">Zaloguj się</a></li>
-            </ul>
-        </div>
-
-
-    </div>
-</nav>
+<jsp:include page="fragments/navbar.jsp" />
 
 <div class="container">
     <div class="col-sm-6 col-md-4 col-md-offset-4">
@@ -39,18 +21,13 @@
             <input name="j_username" type="text" class="form-control" placeholder="Username" required autofocus>
             <input name="j_password" type="password" class="form-control" placeholder="Password" required>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-            <a href="#" style="color: black">Sign on</a>
+            <a href="${pageContext.request.contextPath}/sign-on" style="color: black">Sign on</a>
         </form>
     </div>
 </div>
 
 
-
-<footer class="footer">
-    <div class="container">
-        <p class="navbar-text">Forum - developed by <a href="https://github.com/DaDudek">Dawid Dudek</a></p>
-    </div>
-</footer>
+<jsp:include page="fragments/footer.jsp" />
 
 <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>

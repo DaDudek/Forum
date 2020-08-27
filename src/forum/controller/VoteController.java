@@ -41,7 +41,6 @@ public class VoteController extends HttpServlet {
     private void updatePost(int postId, Vote pastVote, Vote newVote){
         PostService postService = new PostService();
         Post post =postService.readPost(postId);
-        System.out.println(post);
         Post updatedPost = choosePostUpdateOption(post, pastVote, newVote);
         postService.updatePost(updatedPost);
     }
