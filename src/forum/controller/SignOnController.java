@@ -22,6 +22,6 @@ public class SignOnController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("signon.jsp").forward(request,response);
+        request.getRequestDispatcher("/WEB-INF/signon.jsp").forward(request,response);
     }
 }

@@ -24,6 +24,6 @@ public class HomeController extends HttpServlet {
         }
         List<Post> posts = postService.readPosts(postSort);
         request.setAttribute("posts",posts);
-        request.getRequestDispatcher("index.jsp").forward(request,response);
+        request.getRequestDispatcher("WEB-INF/index.jsp").forward(request,response);
     }
 }

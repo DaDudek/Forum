@@ -30,7 +30,7 @@ public class PostAddController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getUserPrincipal() != null){
-            request.getRequestDispatcher("new-post.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/addpost.jsp").forward(request, response);
         } else {
             response.sendError(403);
         }
