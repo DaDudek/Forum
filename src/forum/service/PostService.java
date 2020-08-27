@@ -37,6 +37,12 @@ public class PostService {
         return postDAO.update(post);
     }
 
+    public List<Post> searchPostsByKeywords(String keywords, String postSort){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        PostDAO postDAO = factory.getPostDAO();
+        return postDAO.getByKeywords(keywords,PostSort.valueOf(postSort));
+    }
+
     private Post initializePost(String title, String description, String message, User user){
         Post post = new Post();
         post.setTitle(title);

@@ -14,6 +14,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="${pageContext.request.contextPath}">Główna</a></li>
                 <li><a href="${pageContext.request.contextPath}/new-post">Dodaj</a></li>
+                <li><a href="${pageContext.request.contextPath}/search">Szukaj</a></li>
                 <c:choose>
                     <c:when test="${not empty sessionScope.user}">
                         <li><a href="${pageContext.request.contextPath}/sign-out">Wyloguj się</a></li>

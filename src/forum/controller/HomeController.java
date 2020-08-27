@@ -20,7 +20,7 @@ public class HomeController extends HttpServlet {
         PostService postService = new PostService();
         String postSort = request.getParameter("postSort");
         if (postSort == null){
-            postSort = "ORDER_BY_VOTE";
+            postSort = "ORDER_BY_BEST_VOTE";
         }
         List<Post> posts = postService.readPosts(postSort);
         request.setAttribute("posts",posts);

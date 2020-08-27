@@ -23,15 +23,38 @@ public class PostDAOMysql implements PostDAO{
             "INSERT INTO post(user_id, title, description, message, date, positive_vote, negative_vote) " +
                     "VALUES(:user_id, :title, :description, :message, :date, :positive_vote, :negative_vote)";
 
-    private static final String READ_ALL_BY_VOTE =
+    private static final String READ_ALL_AND_SORT_BY_VOTE =
             "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
                     "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
                     "ORDER BY (positive_vote - negative_vote) DESC"; // the best score post will be first;
 
-    private static final String READ_ALL_BY_DATE =
+    private static final String READ_ALL_AND_SORT_BY_NEWEST =
             "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
                     "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
                     "ORDER BY date DESC"; //the newest post will be first
+
+    private static final String READ_ALL_AND_SORT_BY_OLDEST =
+            "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
+                    "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
+                    "ORDER BY date "; //the oldest post will be first
+
+    private static final String READ_BY_KEYWORDS_AND_SORT_BY_VOTE =
+            "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
+                    "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
+                    "WHERE title COLLATE UTF8_GENERAL_CI LIKE :keywords OR  description COLLATE UTF8_GENERAL_CI LIKE :keywords "+
+                    "ORDER BY (positive_vote - negative_vote) DESC"; // the best score post will be first also ignore character case;
+
+    private static final String READ_BY_KEYWORDS_AND_SORT_BY_NEWEST =
+            "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
+                    "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
+                    "WHERE title COLLATE UTF8_GENERAL_CI LIKE :keywords OR  description COLLATE UTF8_GENERAL_CI LIKE :keywords "+
+                    "ORDER BY date DESC"; //the newest post will be first
+
+    private static final String READ_BY_KEYWORDS_AND_SORT_BY_OLDEST =
+            "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
+                    "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
+                    "WHERE title COLLATE UTF8_GENERAL_CI LIKE :keywords OR  description COLLATE UTF8_GENERAL_CI LIKE :keywords "+
+                    "ORDER BY date "; //the oldest post will be first
 
     private static final String UPDATE =
             "UPDATE post SET user_id =:user_id, title = :title, description = :description , message = :message , date = :date, " +
@@ -86,14 +109,34 @@ public class PostDAOMysql implements PostDAO{
     public List<Post> getAll(PostSort postSort)
     {
         switch (postSort) {
-            case ORDER_BY_DATE:
-                return template.query(READ_ALL_BY_DATE, new PostRowMapper());
-            case ORDER_BY_VOTE:
-                return template.query(READ_ALL_BY_VOTE, new PostRowMapper());
+            case ORDER_BY_OLDEST:
+                return template.query(READ_ALL_AND_SORT_BY_OLDEST, new PostRowMapper());
+            case ORDER_BY_NEWEST:
+                return template.query(READ_ALL_AND_SORT_BY_NEWEST, new PostRowMapper());
+            case ORDER_BY_BEST_VOTE:
+                return template.query(READ_ALL_AND_SORT_BY_VOTE, new PostRowMapper());
             default:
                 return null;
         }
     }
+
+    @Override
+    public List<Post> getByKeywords(String keywords, PostSort postSort) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("keywords","%"+keywords+"%");
+        SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
+        switch (postSort){
+            case ORDER_BY_NEWEST:
+                return template.query(READ_BY_KEYWORDS_AND_SORT_BY_NEWEST,parameterSource,new PostRowMapper());
+            case ORDER_BY_BEST_VOTE:
+                return template.query(READ_BY_KEYWORDS_AND_SORT_BY_VOTE,parameterSource,new PostRowMapper());
+            case ORDER_BY_OLDEST:
+                return template.query(READ_BY_KEYWORDS_AND_SORT_BY_OLDEST,parameterSource,new PostRowMapper());
+            default:
+                return null;
+        }
+    }
+
 
     private Map<String, Object> mapPost(Post post){
         Map<String, Object> map = new HashMap<>();
