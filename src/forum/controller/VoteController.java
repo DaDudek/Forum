@@ -21,13 +21,23 @@ public class VoteController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("user");
+        String responseAdress = "";
         if (user != null){
             int userId = user.getUserId();
             int postId = Integer.parseInt(request.getParameter("post_id"));
             boolean isPositive = Boolean.parseBoolean(request.getParameter("is_positive"));
             updateVote(postId,userId, isPositive);
+            if (request.getParameter("post-page") != null) {
+                responseAdress = request.getContextPath() + "/post?post-id="+postId;
+            }
+            else {
+                responseAdress = request.getContextPath()+"/";
+            }
         }
-        response.sendRedirect(request.getContextPath()+"/");
+        else {
+            responseAdress = request.getContextPath()+"/";
+        }
+        response.sendRedirect(responseAdress);
     }
 
     private void updateVote(int postId, int userId, boolean isPositive){

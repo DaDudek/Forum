@@ -15,12 +15,13 @@
 <body>
 
 <jsp:include page="fragments/navbar.jsp" />
+
     <div class="container">
         <div class="row bs-callout bs-callout-warning">
             <div class="col col-md-1 col-sm-2">
-                <a href="${pageContext.request.contextPath}/vote?post_id=${requestScope.post.postId}&is_positive=true" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
+                <a href="${pageContext.request.contextPath}/vote?post_id=${requestScope.post.postId}&is_positive=true&post-page=true" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
                 <div class="well well-sm centered"><p style="text-align: center"><c:out value="${requestScope.post.positiveVote - requestScope.post.negativeVote}" /></div>
-                <a href="${pageContext.request.contextPath}/vote?post_id=${requestScope.post.postId}&is_positive=false" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
+                <a href="${pageContext.request.contextPath}/vote?post_id=${requestScope.post.postId}&is_positive=false&post-page=true" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
             </div>
             <div class="col col-md-11 col-sm-10">
                 <h3 class="centered"><a href="#"><c:out value="${requestScope.post.title}" /></a></h3>
