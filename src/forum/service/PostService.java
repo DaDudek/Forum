@@ -25,6 +25,12 @@ public class PostService {
         return postDAO.getAll(PostSort.valueOf(postSort));
     }
 
+    public List<Post> readUserPostHistory(int user_id){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        PostDAO postDAO = factory.getPostDAO();
+        return postDAO.getUserPosts(user_id);
+    }
+
     public Post readPost(int postId){
         DAOFactory factory = DAOFactory.getDAOFactory();
         PostDAO postDAO = factory.getPostDAO();

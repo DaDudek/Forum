@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "history")
+@WebServlet("/history")
 public class HistoryController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -22,12 +22,8 @@ public class HistoryController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PostService postService = new PostService();
         UserService userService = new UserService();
-        User user = userService.readUser(Integer.parseInt(request.getParameter("user_id")));
-        String postSort = request.getParameter("postSort");
-        if (postSort == null){
-            postSort = "ORDER_BY_BEST_VOTE";
-        }
-        List<Post> posts = postService.readPosts(postSort);
+        User user = (User) request.getSession().getAttribute("user");
+        List<Post> posts = postService.readUserPostHistory(user.getUserId());
         request.setAttribute("posts",posts);
         request.getRequestDispatcher("WEB-INF/index.jsp").forward(request,response);
     }

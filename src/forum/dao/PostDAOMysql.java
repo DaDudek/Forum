@@ -144,6 +144,15 @@ public class PostDAOMysql implements PostDAO{
         }
     }
 
+    @Override
+    public List<Post> getUserPosts(Integer user_id) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("user_id", user_id);
+        SqlParameterSource parameterSource = new MapSqlParameterSource(map);
+        return template.query(READ_USER_ALL_POSTS_AND_SORT_BY_NEWEST,parameterSource, new PostRowMapper());
+
+    }
+
 
     private Map<String, Object> mapPost(Post post){
         Map<String, Object> map = new HashMap<>();

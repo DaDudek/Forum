@@ -14,7 +14,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="${pageContext.request.contextPath}">Główna</a></li>
                 <c:if test="${not empty sessionScope.user}">
-                    <li><a href="${pageContext.request.contextPath}/history?user_id=${sessionScope.user.userId}">Historia</a></li>
+                    <li><a href="${pageContext.request.contextPath}/history">Historia</a></li>
                 </c:if>
                 <li><a href="${pageContext.request.contextPath}/new-post">Dodaj</a></li>
                 <li><a href="${pageContext.request.contextPath}/search">Szukaj</a></li>
