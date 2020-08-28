@@ -65,6 +65,11 @@ public class PostDAOMysql implements PostDAO{
                     "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id "
                     + "WHERE post_id = :post_id";
 
+    private static final String READ_USER_ALL_POSTS_AND_SORT_BY_NEWEST =
+            "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
+                    "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
+                    "WHERE post.user_id = :user_id ORDER BY date DESC"; //the newest post will be first
+
 
     private NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
 
@@ -89,6 +94,8 @@ public class PostDAOMysql implements PostDAO{
         Post post = template.queryForObject(READ,parameterSource, new PostRowMapper());
         return post;
     }
+
+
 
     @Override
     public boolean update(Post updateObject) {

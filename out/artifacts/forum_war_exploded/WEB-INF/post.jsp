@@ -15,6 +15,7 @@
 <body>
 
 <jsp:include page="fragments/navbar.jsp" />
+
     <div class="container">
         <div class="row bs-callout bs-callout-warning">
             <div class="col col-md-1 col-sm-2">
