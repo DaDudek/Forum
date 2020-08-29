@@ -25,6 +25,12 @@ public class PostService {
         return postDAO.getAll(PostSort.valueOf(postSort));
     }
 
+    public boolean deletePost(int user_id){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        PostDAO postDAO = factory.getPostDAO();
+        return postDAO.delete(user_id);
+    }
+
     public List<Post> readUserPostHistory(int user_id){
         DAOFactory factory = DAOFactory.getDAOFactory();
         PostDAO postDAO = factory.getPostDAO();

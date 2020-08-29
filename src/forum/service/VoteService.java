@@ -25,6 +25,11 @@ public class VoteService {
         VoteDAO voteDAO = factory.getVoteDAO();
         return voteDAO.getVoteByIds(postId,userId);
     }
+    public boolean deletePostAllComments(int postId){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        VoteDAO voteDAO = factory.getVoteDAO();
+        return voteDAO.removeAllPostComments(postId);
+    }
 
     private Vote createVote(int postId, int userId, boolean isPositive){
         Vote vote = new Vote();

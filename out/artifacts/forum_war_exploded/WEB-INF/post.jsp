@@ -25,8 +25,11 @@
             </div>
             <div class="col col-md-11 col-sm-10">
                 <h3 class="centered"><a href="#"><c:out value="${requestScope.post.title}" /></a></h3>
-                <h6><small style="color:#171716">Dodane przez: <c:out value="${requestScope.post.user.username}" />  <fmt:formatDate value="${post.date}" pattern="dd/MM/YYYY"/></small></h6>
+                <h6><small style="color:#171716">Dodane przez: <c:out value="${requestScope.post.user.username}" />  <fmt:formatDate value="${requestScope.post.date}" pattern="dd/MM/YYYY"/></small></h6>
                 <p> <c:out value="${requestScope.post.message}" /></p>
+                <c:if test="${requestScope.post.user.userId ==  sessionScope.user.userId}">
+                    <a href="${pageContext.request.contextPath}/delete-post?post_id=${requestScope.post.postId}"><button class="btn btn-danger btn-xs">Usuń post</button></a>
+                </c:if>
             </div>
         </div>
     </div>

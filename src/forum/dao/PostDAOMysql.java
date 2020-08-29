@@ -69,6 +69,8 @@ public class PostDAOMysql implements PostDAO{
             "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
                     "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
                     "WHERE post.user_id = :user_id ORDER BY date DESC"; //the newest post will be first
+    
+    private static final String DELETE = "DELETE FROM POST where post_id = :post_id";
 
 
     private NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
@@ -109,7 +111,11 @@ public class PostDAOMysql implements PostDAO{
 
     @Override
     public boolean delete(Integer key) {
-        return false;
+        Map<String, Object> map = new HashMap<>();
+        map.put("post_id", key);
+        SqlParameterSource parameterSource = new MapSqlParameterSource(map);
+        return (template.update(DELETE,parameterSource) == 1);
+
     }
 
     @Override
