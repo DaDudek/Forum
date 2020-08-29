@@ -26,9 +26,35 @@
             <div class="col col-md-11 col-sm-10">
                 <h3 class="centered"><a href="#"><c:out value="${requestScope.post.title}" /></a></h3>
                 <h6><small style="color:#171716">Dodane przez: <c:out value="${requestScope.post.user.username}" />  <fmt:formatDate value="${requestScope.post.date}" pattern="dd/MM/YYYY"/></small></h6>
-                <p> <c:out value="${requestScope.post.message}" /></p>
+                <c:choose>
+                    <c:when test="${requestScope.isEditing == true}">
+                        <form class="form-signin" method="post" action="edit-post">
+                            <input name="inputTitle" type="text" class="form-control" placeholder="post title max 60 character"
+                                   value="${requestScope.post.title}" required autofocus />
+                            <textarea name="inputDescription" rows="5" class="form-control"
+                                      placeholder="post description - max 100 character" required autofocus><${requestScope.post.description}/textarea>
+                            <textarea name="inputMessage" rows="5" class="form-control"
+                                       placeholder="post message - max 500 character" required autofocus>${requestScope.post.message}</textarea>
+                            <input class="btn btn-lg btn-primary btn-block" type="submit"
+                                   value="save changes" />
+                        </form>
+                    </c:when>
+                    <c:otherwise>
+                        <p> <c:out value="${requestScope.post.message}" /></p>
+                    </c:otherwise>
+                </c:choose>
                 <c:if test="${requestScope.post.user.userId ==  sessionScope.user.userId}">
                     <a href="${pageContext.request.contextPath}/delete-post?post_id=${requestScope.post.postId}"><button class="btn btn-danger btn-xs">Usuń post</button></a>
+                </c:if>
+                <c:if test="${requestScope.post.user.userId ==  sessionScope.user.userId}">
+                    <c:choose>
+                        <c:when test="${requestScope.isEditing == true}">
+                            <a href="${pageContext.request.contextPath}/edit-post?post_id=${requestScope.post.postId}"><button class="btn btn-success btn-xs">Zapisz zmiany</button></a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/edit-post?post_id=${requestScope.post.postId}"><button class="btn btn-warning btn-xs">Edytuj post</button></a>
+                        </c:otherwise>
+                    </c:choose>
                 </c:if>
             </div>
         </div>
