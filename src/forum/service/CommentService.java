@@ -8,6 +8,7 @@ import forum.model.User;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 public class CommentService {
 
@@ -17,6 +18,12 @@ public class CommentService {
         CommentDAO commentDAO = factory.getCommentDAO();
         commentDAO.create(comment);
 
+    }
+
+    public List<Comment> readPostAllComment(int post_id){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        CommentDAO commentDAO = factory.getCommentDAO();
+        return commentDAO.readAllPostComment(post_id);
     }
 
 

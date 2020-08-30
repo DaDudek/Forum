@@ -11,6 +11,7 @@ public class Comment {
     private String message;
     private int positiveVote;
     private int negativeVote;
+    private String author;
 
     public Comment() {
     }
@@ -23,6 +24,7 @@ public class Comment {
         this.message = comment.getMessage();
         this.positiveVote = comment.getPositiveVote();
         this.negativeVote = comment.getNegativeVote();
+        this.author = comment.author;
     }
 
 
@@ -83,6 +85,15 @@ public class Comment {
     }
 
 
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -94,17 +105,17 @@ public class Comment {
                 positiveVote == comment.positiveVote &&
                 negativeVote == comment.negativeVote &&
                 Objects.equals(date, comment.date) &&
-                Objects.equals(message, comment.message);
+                Objects.equals(message, comment.message) &&
+                Objects.equals(author, comment.author);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(commentId, postId, userId, date, message, positiveVote, negativeVote);
+        return Objects.hash(commentId, postId, userId, date, message, positiveVote, negativeVote, author);
     }
 
     @Override
-    public String
-    toString() {
+    public String toString() {
         return "Comment{" +
                 "commentId=" + commentId +
                 ", postId=" + postId +
@@ -113,6 +124,8 @@ public class Comment {
                 ", message='" + message + '\'' +
                 ", positiveVote=" + positiveVote +
                 ", negativeVote=" + negativeVote +
+                ", author='" + author + '\'' +
                 '}';
     }
+
 }

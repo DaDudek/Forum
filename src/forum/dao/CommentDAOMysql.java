@@ -3,12 +3,15 @@ package forum.dao;
 import forum.model.Comment;
 import forum.model.Post;
 import forum.util.ConnectionProvider;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +21,11 @@ public class CommentDAOMysql  implements CommentDAO{
     private final static String CREATE =
             "INSERT INTO comment(post_id, user_id, date, message, positive_vote, negative_vote) " +
                     "VALUES(:post_id, :user_id, :date, :message, :positive_vote, :negative_vote) ";
+
+    private final static String READ_POST_ALL_COMMENTS =
+            "SELECT comment_id, post_id, comment.user_id, date, message, positive_vote, negative_vote, username " +
+                    "FROM comment INNER JOIN user ON comment.user_id = user.user_id " +
+                    " WHERE post_id = :post_id ORDER BY date DESC";
 
     private NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
 
@@ -62,6 +70,26 @@ public class CommentDAOMysql  implements CommentDAO{
 
     @Override
     public List<Comment> readAllPostComment(int post_id) {
-        return null;
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("post_id",post_id);
+        SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
+        return template.query(READ_POST_ALL_COMMENTS,parameterSource,new CommentRowMapper());
+    }
+
+    private class CommentRowMapper implements RowMapper<Comment>{
+
+        @Override
+        public Comment mapRow(ResultSet resultSet, int i) throws SQLException {
+            Comment comment = new Comment();
+            comment.setUserId(resultSet.getInt("user_id"));
+            comment.setPostId(resultSet.getInt("post_id"));
+            comment.setNegativeVote(resultSet.getInt("negative_vote"));
+            comment.setPositiveVote(resultSet.getInt("positive_vote"));
+            comment.setMessage(resultSet.getString("message"));
+            comment.setCommentId(resultSet.getInt("comment_id"));
+            comment.setDate(resultSet.getTimestamp("date"));
+            comment.setAuthor(resultSet.getString("username"));
+            return comment;
+        }
     }
 }
