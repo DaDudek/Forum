@@ -43,6 +43,7 @@
                         <p> <c:out value="${requestScope.post.message}" /></p>
                     </c:otherwise>
                 </c:choose>
+
                 <c:if test="${requestScope.post.user.userId ==  sessionScope.user.userId}">
                     <a href="${pageContext.request.contextPath}/delete-post?post_id=${requestScope.post.postId}"><button class="btn btn-danger btn-xs">Usuń post</button></a>
                 </c:if>
@@ -56,7 +57,7 @@
 
         <c:if test="${not empty sessionScope.user}">
         <div class="row bs-callout bs-callout-warning">
-                    <form class="form-signin" method="post" action="edit-post?post-id=${requestScope.post.postId}">
+                    <form class="form-signin" method="post" action="add-comment?post-id=${requestScope.post.postId}">
                     <textarea name="inputMessage" rows="5" class="form-control"
                               placeholder="post comment - max 500 character" required autofocus></textarea>
                     <input class="btn btn-lg btn-success btn-block" type="submit"

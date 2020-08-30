@@ -2,6 +2,9 @@ package forum.dao;
 
 import forum.model.Comment;
 
+import java.util.List;
+
 public interface CommentDAO extends GenericDAO<Comment, Integer> {
-    // place for more specific method than CRUD
+
+    List<Comment> readAllPostComment(int post_id);
 }

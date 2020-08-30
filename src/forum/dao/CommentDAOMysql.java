@@ -59,4 +59,9 @@ public class CommentDAOMysql  implements CommentDAO{
         map.put("comment_id",comment.getCommentId());
         return map;
     }
+
+    @Override
+    public List<Comment> readAllPostComment(int post_id) {
+        return null;
+    }
 }
