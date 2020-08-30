@@ -35,7 +35,7 @@
                                       placeholder="post description - max 100 character" required autofocus>${requestScope.post.description}</textarea>
                             <textarea name="inputMessage" rows="5" class="form-control"
                                        placeholder="post message - max 500 character" required autofocus>${requestScope.post.message}</textarea>
-                            <input class="btn btn-lg btn-primary btn-block" type="submit"
+                            <input class="btn btn-lg btn-success btn-block" type="submit"
                                    value="save changes" />
                         </form>
                     </c:when>
@@ -53,6 +53,18 @@
                 </c:if>
             </div>
         </div>
+
+        <c:if test="${not empty sessionScope.user}">
+        <div class="row bs-callout bs-callout-warning">
+                    <form class="form-signin" method="post" action="edit-post?post-id=${requestScope.post.postId}">
+                    <textarea name="inputMessage" rows="5" class="form-control"
+                              placeholder="post message - max 500 character" required autofocus></textarea>
+                    <input class="btn btn-lg btn-success btn-block" type="submit"
+                           value="add comment" />
+        </div>
+        </c:if>
+
+
     </div>
 
 
