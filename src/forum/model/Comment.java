@@ -5,21 +5,24 @@ import java.util.Objects;
 
 public class Comment {
     private int commentId;
-    private Post post;
-    private User user;
+    private int postId;
+    private int userId;
     private Timestamp date;
-    private boolean isPositive;
+    private String message;
+    private int positiveVote;
+    private int negativeVote;
 
     public Comment() {
     }
 
     public Comment(Comment comment){
         this.commentId = comment.getCommentId();
-        this.post = new Post(comment.getPost());
-        this.user = new User(comment.getUser());
+        this.postId = comment.getPostId();
+        this.userId = comment.getUserId();
         this.date = new Timestamp(comment.getDate().getTime());
-        this.isPositive = comment.isPositive();
-
+        this.message = comment.getMessage();
+        this.positiveVote = comment.getPositiveVote();
+        this.negativeVote = comment.getNegativeVote();
     }
 
 
@@ -31,20 +34,20 @@ public class Comment {
         this.commentId = commentId;
     }
 
-    public Post getPost() {
-        return post;
+    public int getPostId() {
+        return postId;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
+    public void setPostId(int postId) {
+        this.postId = postId;
     }
 
-    public User getUser() {
-        return user;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public Timestamp getDate() {
@@ -55,13 +58,30 @@ public class Comment {
         this.date = date;
     }
 
-    public boolean isPositive() {
-        return isPositive;
+    public String getMessage() {
+        return message;
     }
 
-    public void setPositive(boolean positive) {
-        isPositive = positive;
+    public void setMessage(String message) {
+        this.message = message;
     }
+
+    public int getPositiveVote() {
+        return positiveVote;
+    }
+
+    public void setPositiveVote(int positiveVote) {
+        this.positiveVote = positiveVote;
+    }
+
+    public int getNegativeVote() {
+        return negativeVote;
+    }
+
+    public void setNegativeVote(int negativeVote) {
+        this.negativeVote = negativeVote;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -69,25 +89,30 @@ public class Comment {
         if (o == null || getClass() != o.getClass()) return false;
         Comment comment = (Comment) o;
         return commentId == comment.commentId &&
-                isPositive == comment.isPositive &&
-                Objects.equals(post, comment.post) &&
-                Objects.equals(user, comment.user) &&
-                Objects.equals(date, comment.date);
+                postId == comment.postId &&
+                userId == comment.userId &&
+                positiveVote == comment.positiveVote &&
+                negativeVote == comment.negativeVote &&
+                Objects.equals(date, comment.date) &&
+                Objects.equals(message, comment.message);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(commentId, post, user, date, isPositive);
+        return Objects.hash(commentId, postId, userId, date, message, positiveVote, negativeVote);
     }
 
     @Override
-    public String toString() {
+    public String
+    toString() {
         return "Comment{" +
                 "commentId=" + commentId +
-                ", post=" + post +
-                ", user=" + user +
+                ", postId=" + postId +
+                ", userId=" + userId +
                 ", date=" + date +
-                ", isPositive=" + isPositive +
+                ", message='" + message + '\'' +
+                ", positiveVote=" + positiveVote +
+                ", negativeVote=" + negativeVote +
                 '}';
     }
 }
