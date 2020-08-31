@@ -55,16 +55,6 @@
             </div>
         </div>
 
-        <c:if test="${not empty sessionScope.user}">
-        <div class="row bs-callout bs-callout-warning">
-                    <form class="form-signin" method="post" action="add-comment?post-id=${requestScope.post.postId}">
-                    <textarea name="inputMessage" rows="5" class="form-control"
-                              placeholder="post comment - max 500 character" required autofocus></textarea>
-                    <input class="btn btn-lg btn-success btn-block" type="submit"
-                           value="add comment" />
-        </div>
-        </c:if>
-
         <c:if test="${not empty requestScope.comments}">
             <c:forEach var="comment" items="${requestScope.comments}">
                 <div class="container">
@@ -80,18 +70,27 @@
                         </div>
 
                         <c:if test="${comment.userId ==  sessionScope.user.userId}">
-                            <a href="${pageContext.request.contextPath}/delete-comment?comment_id=${comment.commentId}"><button class="btn btn-danger btn-xs">Usuń komentarz</button></a>
+                            <a href="${pageContext.request.contextPath}/delete-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}"><button class="btn btn-danger btn-xs">Usuń komentarz</button></a>
                         </c:if>
                         <c:if test="${comment.userId ==  sessionScope.user.userId}">
                             <c:if test="${requestScope.isEditing == null}">
-                                <a href="${pageContext.request.contextPath}/edit-post?post-id=${requestScope.post.postId}"><button class="btn btn-warning btn-xs">Edytuj komentarz</button></a>
+                                <a href="${pageContext.request.contextPath}/test?post-id=${requestScope.post.postId}"><button class="btn btn-warning btn-xs">Edytuj komentarz</button></a>
                             </c:if>
                         </c:if>
                     </div>
                 </div>
             </c:forEach>
         </c:if>
-
+        
+        <c:if test="${not empty sessionScope.user}">
+            <div class="row bs-callout bs-callout-warning">
+                <form class="form-signin" method="post" action="add-comment?post-id=${requestScope.post.postId}">
+                    <textarea name="inputMessage" rows="5" class="form-control"
+                              placeholder="post comment - max 500 character" required autofocus></textarea>
+                    <input class="btn btn-lg btn-success btn-block" type="submit"
+                           value="add comment" />
+            </div>
+        </c:if>
 
     </div>
 

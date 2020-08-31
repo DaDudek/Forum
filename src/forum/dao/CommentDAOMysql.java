@@ -27,6 +27,9 @@ public class CommentDAOMysql  implements CommentDAO{
                     "FROM comment INNER JOIN user ON comment.user_id = user.user_id " +
                     " WHERE post_id = :post_id ORDER BY date DESC";
 
+    private static final String DELETE = "DELETE FROM comment where comment_id = :comment_id";
+
+
     private NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
 
 
@@ -53,7 +56,11 @@ public class CommentDAOMysql  implements CommentDAO{
 
     @Override
     public boolean delete(Integer key) {
-        return false;
+        Map<String, Object> map = new HashMap<>();
+        map.put("comment_id",key);
+        SqlParameterSource parameterSource = new MapSqlParameterSource(map);
+        return (template.update(DELETE,parameterSource) == 1);
+
     }
 
     private Map<String, Object> mapComment(Comment comment){
