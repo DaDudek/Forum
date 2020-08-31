@@ -27,7 +27,9 @@ public class CommentDAOMysql  implements CommentDAO{
                     "FROM comment INNER JOIN user ON comment.user_id = user.user_id " +
                     " WHERE post_id = :post_id ORDER BY date DESC";
 
-    private static final String DELETE = "DELETE FROM comment where comment_id = :comment_id";
+    private static final String DELETE = "DELETE FROM comment WHERE comment_id = :comment_id";
+
+    private static final String DELETE_ALL_POST_COMMENTS = "DELETE FROM comment WHERE post_id = :post_id";
 
 
     private NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
@@ -63,6 +65,8 @@ public class CommentDAOMysql  implements CommentDAO{
 
     }
 
+
+
     private Map<String, Object> mapComment(Comment comment){
         Map<String, Object> map = new HashMap<>();
         map.put("user_id", comment.getUserId());
@@ -81,6 +85,14 @@ public class CommentDAOMysql  implements CommentDAO{
         paramMap.put("post_id",post_id);
         SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
         return template.query(READ_POST_ALL_COMMENTS,parameterSource,new CommentRowMapper());
+    }
+
+    @Override
+    public boolean deleteAllPostComment(int postId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("post_id", postId);
+        SqlParameterSource parameterSource = new MapSqlParameterSource(map);
+        return template.update(DELETE_ALL_POST_COMMENTS, parameterSource) > 0;
     }
 
     private class CommentRowMapper implements RowMapper<Comment>{

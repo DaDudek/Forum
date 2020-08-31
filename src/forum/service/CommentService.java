@@ -32,6 +32,12 @@ public class CommentService {
         return commentDAO.delete(comment_id);
     }
 
+    public boolean deleteAllPostComment(int postId){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        CommentDAO commentDAO = factory.getCommentDAO();
+        return commentDAO.deleteAllPostComment(postId);
+    }
+
 
     private Comment initializeComment(Post post, User user, String message){
         Comment comment = new Comment();

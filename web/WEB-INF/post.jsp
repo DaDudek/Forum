@@ -81,7 +81,7 @@
                 </div>
             </c:forEach>
         </c:if>
-        
+
         <c:if test="${not empty sessionScope.user}">
             <div class="row bs-callout bs-callout-warning">
                 <form class="form-signin" method="post" action="add-comment?post-id=${requestScope.post.postId}">
