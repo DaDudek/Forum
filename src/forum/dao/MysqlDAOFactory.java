@@ -20,4 +20,9 @@ public class MysqlDAOFactory extends DAOFactory{
     public CommentDAO getCommentDAO() {
         return new CommentDAOMysql();
     }
+
+    @Override
+    public CommentVoteDAO getCommentVoteDAO() {
+        return new CommentVoteDAOMysql();
+    }
 }

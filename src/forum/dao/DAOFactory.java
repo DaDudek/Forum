@@ -13,6 +13,8 @@ public abstract class DAOFactory {
 
     public abstract CommentDAO getCommentDAO();
 
+    public abstract CommentVoteDAO getCommentVoteDAO();
+
     public static DAOFactory getDAOFactory() {
         DAOFactory factory = null;
         try {
