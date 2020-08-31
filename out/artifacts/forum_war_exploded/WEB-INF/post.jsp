@@ -78,6 +78,15 @@
                             <h6><small style="color:#171716">Dodane przez: <c:out value="${comment.author}" />  <fmt:formatDate value="${comment.date}" pattern="dd/MM/YYYY"/></small></h6>
                             <p> <c:out value="${comment.message}" /></p>
                         </div>
+
+                        <c:if test="${comment.userId ==  sessionScope.user.userId}">
+                            <a href="${pageContext.request.contextPath}/delete-comment?comment_id=${comment.commentId}"><button class="btn btn-danger btn-xs">Usuń komentarz</button></a>
+                        </c:if>
+                        <c:if test="${comment.userId ==  sessionScope.user.userId}">
+                            <c:if test="${requestScope.isEditing == null}">
+                                <a href="${pageContext.request.contextPath}/edit-post?post-id=${requestScope.post.postId}"><button class="btn btn-warning btn-xs">Edytuj komentarz</button></a>
+                            </c:if>
+                        </c:if>
                     </div>
                 </div>
             </c:forEach>
