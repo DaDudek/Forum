@@ -66,7 +66,19 @@
                         </div>
                         <div class="col col-md-11 col-sm-10">
                             <h6><small style="color:#171716">Dodane przez: <c:out value="${comment.author}" />  <fmt:formatDate value="${comment.date}" pattern="dd/MM/YYYY"/></small></h6>
-                            <p> <c:out value="${comment.message}" /></p>
+                            <c:choose>
+                                <c:when test="${requestScope.commentEditingId == comment.commentId}">
+                                    <form class="form-signin" method="post" action="edit-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}">
+                                        <textarea name="inputMessage" rows="5" class="form-control"
+                                                  placeholder="post comment - max 500 character" required autofocus>${comment.message}</textarea>
+                                        <input class="btn btn-lg btn-success btn-block" type="submit"
+                                               value="save comment changes" />
+                                    </form>
+                                </c:when>
+                                <c:otherwise>
+                                    <p> <c:out value="${comment.message}" /></p>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
 
                         <c:if test="${comment.userId ==  sessionScope.user.userId}">
@@ -74,7 +86,7 @@
                         </c:if>
                         <c:if test="${comment.userId ==  sessionScope.user.userId}">
                             <c:if test="${requestScope.isEditing == null}">
-                                <a href="${pageContext.request.contextPath}/test?post-id=${requestScope.post.postId}"><button class="btn btn-warning btn-xs">Edytuj komentarz</button></a>
+                                <a href="${pageContext.request.contextPath}/edit-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}"><button class="btn btn-warning btn-xs">Edytuj komentarz</button></a>
                             </c:if>
                         </c:if>
                     </div>
