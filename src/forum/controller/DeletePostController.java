@@ -30,7 +30,7 @@ public class DeletePostController extends HttpServlet {
             Post post = postService.readPost(postId);
             if (post != null && post.getUser().getUserId() == userId) {
                 commentService.deleteAllPostComment(postId);
-                voteService.deletePostAllComments(postId);
+                voteService.deletePostAllVotes(postId);
                 postService.deletePost(postId);
             }
         }

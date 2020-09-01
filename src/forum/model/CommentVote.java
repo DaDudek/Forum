@@ -11,6 +11,18 @@ public class CommentVote {
     private boolean isPositive;
     private VoteType voteType;
 
+    public CommentVote() {
+    }
+
+    public CommentVote(CommentVote commentVote){
+        this.commentVoteId = commentVote.getCommentVoteId();
+        this.commentId = commentVote.getCommentId();
+        this.userId = commentVote.getUserId();
+        this.date = commentVote.getDate();
+        this.isPositive = commentVote.isPositive();
+        this.voteType = commentVote.getVoteType();
+    }
+
     public int getCommentVoteId() {
         return commentVoteId;
     }

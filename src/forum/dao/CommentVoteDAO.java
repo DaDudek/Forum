@@ -1,4 +1,6 @@
 package forum.dao;
 
-public interface CommentVoteDAO extends GenericDAO<CommentVoteDAO, Integer> {
+import forum.model.CommentVote;
+
+public interface CommentVoteDAO extends GenericDAO<CommentVote, Integer> {
 }

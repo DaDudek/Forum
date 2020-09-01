@@ -28,7 +28,7 @@ public class VoteDAOMysql implements VoteDAO{
 
     private static final String UPDATE = "UPDATE vote SET date=:date, is_positive=:is_positive, vote_type=:vote_type WHERE vote_id=:vote_id;";
 
-    private static final String DELETE_POST_ALL_COMMENTS = "DELETE FROM vote WHERE post_id = :post_id";
+    private static final String DELETE_POST_ALL_VOTES = "DELETE FROM vote WHERE post_id = :post_id";
 
     private NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
 
@@ -92,11 +92,11 @@ public class VoteDAOMysql implements VoteDAO{
     }
 
     @Override
-    public boolean removeAllPostComments(int postId) {
+    public boolean removeAllPostVotes(int postId) {
         Map<String, Object> map = new HashMap<>();
         map.put("post_id", postId);
         SqlParameterSource parameterSource = new MapSqlParameterSource(map);
-        return template.update(DELETE_POST_ALL_COMMENTS,parameterSource) > 0;
+        return template.update(DELETE_POST_ALL_VOTES,parameterSource) > 0;
     }
 
 
