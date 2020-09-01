@@ -31,6 +31,15 @@ public class CommentDAOMysql  implements CommentDAO{
 
     private static final String DELETE_ALL_POST_COMMENTS = "DELETE FROM comment WHERE post_id = :post_id";
 
+    private static final String READ =
+            "SELECT comment_id, post_id, comment.user_id, date, message, positive_vote, negative_vote, username " +
+                    "FROM comment INNER JOIN user ON comment.user_id = user.user_id " +
+                    "WHERE comment_id = :comment_id ";
+
+    private static final String UPDATE =
+            "UPDATE comment SET user_id = :user_id, message = :message , date = :date, " +
+                    "positive_vote = :positive_vote, negative_vote = :negative_vote WHERE comment_id = :comment_id";
+
 
     private NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
 
@@ -47,12 +56,21 @@ public class CommentDAOMysql  implements CommentDAO{
     }
 
     @Override
-    public Comment read(Integer primaryKey) {
-        return null;
+    public Comment read(Integer primaryKey){
+        Map<String, Object> map = new HashMap<>();
+        map.put("comment_id",primaryKey);
+        SqlParameterSource parameterSource = new MapSqlParameterSource(map);
+        Comment comment = template.queryForObject(READ,parameterSource, new CommentRowMapper());
+        return comment;
     }
 
     @Override
     public boolean update(Comment updateObject) {
+        Map<String, Object> map = mapComment(updateObject);
+        SqlParameterSource parameterSource = new MapSqlParameterSource(map);
+        if (template.update(UPDATE, parameterSource) == 1){
+            return true;
+        }
         return false;
     }
 

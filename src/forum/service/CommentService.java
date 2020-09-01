@@ -12,6 +12,18 @@ import java.util.List;
 
 public class CommentService {
 
+    public boolean updateComment(Comment comment){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        CommentDAO commentDAO = factory.getCommentDAO();
+        return commentDAO.update(comment);
+    }
+
+    public Comment readComment(int commentId){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        CommentDAO commentDAO = factory.getCommentDAO();
+        return commentDAO.read(commentId);
+    }
+
     public void createComment(Post post, User user, String message){
         Comment comment = initializeComment(post,user,message);
         DAOFactory factory = DAOFactory.getDAOFactory();

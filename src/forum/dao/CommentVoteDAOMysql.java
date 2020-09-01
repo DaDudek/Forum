@@ -30,7 +30,7 @@ public class CommentVoteDAOMysql implements CommentVoteDAO {
 
     private static final String READ_VOTE_BY_IDS =
             "SELECT comment_vote_id, comment_id, user_id,date, is_positive, vote_type " +
-            "FROM vote WHERE user_id = :user_id AND comment_id = :comment_id " ;
+            "FROM comment_vote WHERE user_id = :user_id AND comment_id = :comment_id " ;
 
     private static final String UPDATE =
             "UPDATE comment_vote SET date =:date, is_positive=:is_positive, vote_type=:vote_type " +
@@ -50,7 +50,7 @@ public class CommentVoteDAOMysql implements CommentVoteDAO {
         map.put("user_id", commentVote.getUserId());
         map.put("date", commentVote.getDate());
         map.put("is_positive", commentVote.isPositive());
-        map.put("vote_type", commentVote.getVoteType());
+        map.put("vote_type", commentVote.getVoteType().name());
         SqlParameterSource parameterSource = new MapSqlParameterSource(map);
         if (template.update(CREATE,parameterSource,holder) == 1){
             commentVote.setCommentVoteId(holder.getKey().intValue());
