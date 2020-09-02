@@ -5,6 +5,7 @@ import forum.model.Post;
 import forum.model.User;
 import forum.service.CommentService;
 import forum.service.PostService;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,14 +41,27 @@ public class EditCommentController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("commentEditingId",Integer.valueOf(request.getParameter("comment-id")));
-        PostService postService = new PostService();
-        CommentService commentService = new CommentService();
-        Post post = postService.readPost(Integer.parseInt(request.getParameter("post-id")));
-        List<Comment> comments = commentService.readPostAllComment(Integer.parseInt(request.getParameter("post-id")));
-        request.setAttribute("post",post);
-        request.setAttribute("comments",comments);
-        request.getRequestDispatcher("WEB-INF/post.jsp").forward(request,response);
-
+        try {
+            int commentId = Integer.parseInt(request.getParameter("comment-id"));
+            int postId = Integer.parseInt(request.getParameter("post-id"));
+            PostService postService = new PostService();
+            CommentService commentService = new CommentService();
+            Post post = postService.readPost(postId);
+            Comment comment = commentService.readComment(commentId);
+            User user = (User) request.getSession().getAttribute("user");
+            List<Comment> comments = commentService.readPostAllComment(Integer.parseInt(request.getParameter("post-id")));
+            request.setAttribute("post", post);
+            request.setAttribute("comments", comments);
+            if (comment.getUserId() == user.getUserId()){
+                request.setAttribute("commentEditingId", commentId);
+                request.getRequestDispatcher("WEB-INF/post.jsp").forward(request, response);
+            }
+            else{
+                response.sendError(403);
+            }
+        }
+        catch (NumberFormatException | EmptyResultDataAccessException e){
+            response.sendError(404);
+        }
     }
 }

@@ -16,6 +16,7 @@
             <url-pattern>/delete-post</url-pattern>
             <url-pattern>/comment-vote</url-pattern>
             <url-pattern>/delete-comment</url-pattern>
+            <url-pattern>/edit-comment</url-pattern>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
         </web-resource-collection>

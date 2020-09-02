@@ -5,6 +5,7 @@ import forum.model.User;
 import forum.model.Vote;
 import forum.service.PostService;
 import forum.service.VoteService;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,24 +21,22 @@ public class VoteController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = (User) request.getSession().getAttribute("user");
-        String responseAdress = "";
-        if (user != null){
+        try {
+            User user = (User) request.getSession().getAttribute("user");
+            String responseAdress = "";
             int userId = user.getUserId();
             int postId = Integer.parseInt(request.getParameter("post_id"));
             boolean isPositive = Boolean.parseBoolean(request.getParameter("is_positive"));
-            updateVote(postId,userId, isPositive);
+            updateVote(postId, userId, isPositive);
             if (request.getParameter("post-page") != null) {
-                responseAdress = request.getContextPath() + "/post?post-id="+postId;
+                responseAdress = request.getContextPath() + "/post?post-id=" + postId;
+            } else {
+                responseAdress = request.getContextPath() + "/";
             }
-            else {
-                responseAdress = request.getContextPath()+"/";
-            }
+            response.sendRedirect(responseAdress);
+        } catch (EmptyResultDataAccessException | NumberFormatException e){
+            response.sendError(403);
         }
-        else {
-            responseAdress = request.getContextPath()+"/";
-        }
-        response.sendRedirect(responseAdress);
     }
 
     private void updateVote(int postId, int userId, boolean isPositive){

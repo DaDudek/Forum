@@ -4,6 +4,7 @@ import forum.model.Comment;
 import forum.model.Post;
 import forum.service.CommentService;
 import forum.service.PostService;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,12 +21,16 @@ public class PostViewController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PostService postService = new PostService();
-        Post post = postService.readPost(Integer.parseInt(request.getParameter("post-id")));
-        CommentService commentService = new CommentService();
-        List<Comment> comments = commentService.readPostAllComment(Integer.parseInt(request.getParameter("post-id")));
-        request.setAttribute("post",post);
-        request.setAttribute("comments",comments);
-        request.getRequestDispatcher("WEB-INF/post.jsp").forward(request,response);
+        try {
+            PostService postService = new PostService();
+            Post post = postService.readPost(Integer.parseInt(request.getParameter("post-id")));
+            CommentService commentService = new CommentService();
+            List<Comment> comments = commentService.readPostAllComment(Integer.parseInt(request.getParameter("post-id")));
+            request.setAttribute("post", post);
+            request.setAttribute("comments", comments);
+            request.getRequestDispatcher("WEB-INF/post.jsp").forward(request, response);
+        } catch (EmptyResultDataAccessException e){
+            response.sendError(404);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package forum.controller;
 
 import forum.model.Post;
+import forum.model.PostSort;
 import forum.service.PostService;
 
 import javax.servlet.ServletException;
@@ -23,12 +24,18 @@ public class SearchController extends HttpServlet {
             request.getRequestDispatcher("WEB-INF/search.jsp").forward(request, response);
         }
         else {
-            PostService postService = new PostService();
-            String postSort = request.getParameter("sort");
-            String keywords = request.getParameter("keywords");
-            List<Post> posts = postService.searchPostsByKeywords(keywords, returnPostSortName(postSort));
-            request.setAttribute("posts", posts);
-            request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
+            try {
+                PostService postService = new PostService();
+                String postSort = request.getParameter("sort");
+                String keywords = request.getParameter("keywords");
+                PostSort.valueOf(postSort);
+                List<Post> posts = postService.searchPostsByKeywords(keywords, returnPostSortName(postSort));
+                request.setAttribute("posts", posts);
+                request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
+            } catch (IllegalArgumentException e){
+                response.sendError(404);
+            }
+
         }
     }
 
