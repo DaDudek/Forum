@@ -27,6 +27,11 @@ public class CommentDAOMysql  implements CommentDAO{
                     "FROM comment INNER JOIN user ON comment.user_id = user.user_id " +
                     " WHERE post_id = :post_id ORDER BY date DESC";
 
+    private final static String READ_USER_ALL_COMMENTS =
+            "SELECT comment_id, post_id, comment.user_id, date, message, positive_vote, negative_vote, username " +
+                    "FROM comment INNER JOIN user ON comment.user_id = user.user_id " +
+                    " WHERE comment.user_id = :user_id ORDER BY date DESC";
+
     private static final String DELETE = "DELETE FROM comment WHERE comment_id = :comment_id";
 
     private static final String DELETE_ALL_POST_COMMENTS = "DELETE FROM comment WHERE post_id = :post_id";
@@ -103,6 +108,14 @@ public class CommentDAOMysql  implements CommentDAO{
         paramMap.put("post_id",post_id);
         SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
         return template.query(READ_POST_ALL_COMMENTS,parameterSource,new CommentRowMapper());
+    }
+
+    @Override
+    public List<Comment> readUserAllComments(int userId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("user_id",userId);
+        SqlParameterSource parameterSource = new MapSqlParameterSource(map);
+        return template.query(READ_USER_ALL_COMMENTS,parameterSource,new CommentRowMapper());
     }
 
     @Override

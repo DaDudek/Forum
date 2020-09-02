@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface CommentDAO extends GenericDAO<Comment, Integer> {
 
-    List<Comment> readAllPostComment(int post_id);
+    List<Comment> readAllPostComment(int postId);
+
+    List<Comment> readUserAllComments(int userId);
 
     boolean deleteAllPostComment(int postId);
 }

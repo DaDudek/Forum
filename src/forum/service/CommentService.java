@@ -38,6 +38,12 @@ public class CommentService {
         return commentDAO.readAllPostComment(post_id);
     }
 
+    public List<Comment> readUserAllComment(int userId){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        CommentDAO commentDAO = factory.getCommentDAO();
+        return commentDAO.readUserAllComments(userId);
+    }
+
     public boolean deleteComment(int comment_id){
         DAOFactory factory = DAOFactory.getDAOFactory();
         CommentDAO commentDAO = factory.getCommentDAO();
