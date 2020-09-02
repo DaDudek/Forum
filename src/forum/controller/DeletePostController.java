@@ -7,6 +7,7 @@ import forum.service.CommentService;
 import forum.service.CommentVoteService;
 import forum.service.PostService;
 import forum.service.VoteService;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,11 +29,11 @@ public class DeletePostController extends HttpServlet {
         VoteService voteService = new VoteService();
         CommentService commentService = new CommentService();
         CommentVoteService commentVoteService = new CommentVoteService();
-        if (user != null && request.getParameter("post_id") != null) {
+        try {
             int userId = user.getUserId();
             int postId = Integer.parseInt(request.getParameter("post_id"));
             Post post = postService.readPost(postId);
-            if (post != null && post.getUser().getUserId() == userId) {
+            if (post.getUser().getUserId() == userId) {
                 List<Comment> commentList = commentService.readPostAllComment(postId);
                 for (int i = 0; i < commentList.size(); i++) {
                     commentVoteService.deleteCommentAllVotes(commentList.get(i).getCommentId());
@@ -41,7 +42,9 @@ public class DeletePostController extends HttpServlet {
                 voteService.deletePostAllVotes(postId);
                 postService.deletePost(postId);
             }
+            response.sendRedirect(request.getContextPath() + "/");
+        } catch (NumberFormatException | EmptyResultDataAccessException e) {
+            response.sendError(404);
         }
-        response.sendRedirect(request.getContextPath() + "/");
     }
 }

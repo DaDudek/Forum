@@ -20,24 +20,18 @@ public class CommentVoteController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = (User) request.getSession().getAttribute("user");
-        String responseAdress = "";
-        if (user != null){
+        try {
+            User user = (User) request.getSession().getAttribute("user");
             int userId = user.getUserId();
             int comment_id = Integer.parseInt(request.getParameter("comment_id"));
+            int post_id = Integer.parseInt(request.getParameter("post_id"));
             boolean isPositive = Boolean.parseBoolean(request.getParameter("is_positive"));
             updateVote(comment_id,userId, isPositive);
-            if (request.getParameter("post-page") != null) {
-                responseAdress = request.getContextPath() + "/post?post-id="+request.getParameter("post_id");
-            }
-            else {
-                responseAdress = request.getContextPath()+"/";
-            }
+            response.sendRedirect(request.getContextPath() + "/post?post-id="+request.getParameter("post_id"));
+        } catch (NumberFormatException numberFormatException){
+            response.sendError(404);
         }
-        else {
-            responseAdress = request.getContextPath()+"/";
-        }
-        response.sendRedirect(responseAdress);
+
     }
 
     private void updateVote(int commentId, int userId, boolean isPositive){
