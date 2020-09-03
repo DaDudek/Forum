@@ -19,7 +19,6 @@
 <div class="container">
     <div class="col-sm-6 col-md-4 col-md-offset-4">
         <form class="form-signin" method="post" action="search">
-            <h2 class="form-signin-heading">sign on</h2>
             <input name="inputKeywords" type="text" class="form-control" placeholder="what do you want to find" required autofocus /> <br />
             <label class="radio"><input type="radio" name="sort" value="best-vote" checked>sort by best vote</label>
             <label class="radio"><input type="radio" name="sort" value="oldest">sort by oldest</label>

@@ -17,12 +17,9 @@ public class HomeController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getSession().setAttribute("url","/");
         PostService postService = new PostService();
-        String postSort = request.getParameter("postSort");
-        if (postSort == null){
-            postSort = "ORDER_BY_BEST_VOTE";
-        }
-        List<Post> posts = postService.readPosts(postSort);
+        List<Post> posts = postService.readPosts("ORDER_BY_NEWEST");
         request.setAttribute("posts",posts);
         request.getRequestDispatcher("WEB-INF/index.jsp").forward(request,response);
     }

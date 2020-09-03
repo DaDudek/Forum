@@ -28,9 +28,10 @@ public class SearchController extends HttpServlet {
                 PostService postService = new PostService();
                 String postSort = request.getParameter("sort");
                 String keywords = request.getParameter("keywords");
-                PostSort.valueOf(postSort);
+                PostSort.valueOf(returnPostSortName(postSort));
                 List<Post> posts = postService.searchPostsByKeywords(keywords, returnPostSortName(postSort));
                 request.setAttribute("posts", posts);
+                request.getSession().setAttribute("url","/search?sort="+postSort+"&keywords="+keywords);
                 request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
             } catch (IllegalArgumentException e){
                 response.sendError(404);

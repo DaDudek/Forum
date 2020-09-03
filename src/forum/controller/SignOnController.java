@@ -18,7 +18,7 @@ public class SignOnController extends HttpServlet {
         String password = request.getParameter("inputPassword");
         String email = request.getParameter("inputEmail");
         userService.createUser(username, email, password);
-        response.sendRedirect(request.getContextPath() + "/");    // in future add message with feedback
+        response.sendRedirect(request.getContextPath()+ "/" + (String) request.getSession().getAttribute("url"));
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

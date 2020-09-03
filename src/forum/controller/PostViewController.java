@@ -28,6 +28,7 @@ public class PostViewController extends HttpServlet {
             List<Comment> comments = commentService.readPostAllComment(Integer.parseInt(request.getParameter("post-id")));
             request.setAttribute("post", post);
             request.setAttribute("comments", comments);
+            request.getSession().setAttribute("url","/post?post-id="+request.getParameter("post-id"));
             request.getRequestDispatcher("WEB-INF/post.jsp").forward(request, response);
         } catch (EmptyResultDataAccessException e){
             response.sendError(404);
