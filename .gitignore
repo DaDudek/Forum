@@ -3,3 +3,4 @@
 *.iml
 *.bak
 *mwb
+web/WEB-INF/web.xml
