@@ -44,7 +44,7 @@
                     </c:otherwise>
                 </c:choose>
 
-                <c:if test="${requestScope.post.user.userId ==  sessionScope.user.userId}">
+                <c:if test="${(requestScope.post.user.userId ==  sessionScope.user.userId) or (sessionScope.user.role.name() eq 'ADMIN' )}">
                     <a href="${pageContext.request.contextPath}/delete-post?post_id=${requestScope.post.postId}"><button class="btn btn-danger btn-xs">Usuń post</button></a>
                 </c:if>
                 <c:if test="${requestScope.post.user.userId ==  sessionScope.user.userId}">
@@ -81,7 +81,7 @@
                             </c:choose>
                         </div>
 
-                        <c:if test="${comment.userId ==  sessionScope.user.userId}">
+                        <c:if test="${(comment.userId ==  sessionScope.user.userId) or sessionScope.user.role.name() eq 'ADMIN' }">
                             <a href="${pageContext.request.contextPath}/delete-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}"><button class="btn btn-danger btn-xs">Usuń komentarz</button></a>
                         </c:if>
                         <c:if test="${comment.userId ==  sessionScope.user.userId}">
@@ -93,6 +93,7 @@
                 </div>
             </c:forEach>
         </c:if>
+
 
         <c:if test="${not empty sessionScope.user}">
             <div class="row bs-callout bs-callout-warning">

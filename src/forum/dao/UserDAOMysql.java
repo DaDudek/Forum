@@ -1,5 +1,6 @@
 package forum.dao;
 
+import forum.model.Role;
 import forum.model.User;
 import forum.util.ConnectionProvider;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,9 +21,9 @@ public class UserDAOMysql implements UserDAO {
     private static final String SET_ROLE =
             "INSERT INTO user_role(username) VALUES(:username)";
     private static final String READ =
-            "SELECT user_id, username, email, password, account_active FROM user WHERE user_id = :userId";
+            "SELECT user_id, user.username, email, password, account_active, role_name FROM user INNER JOIN user_role ON user.username = user_role.username WHERE user_id = :userId";
     private static final String READ_BY_USERNAME =
-            "SELECT user_id, username, email, password, account_active FROM user WHERE username = :username";
+            "SELECT user_id, user.username, email, password, account_active, role_name FROM user INNER JOIN user_role ON user.username = user_role.username WHERE user.username = :username";
 
 
 
@@ -79,6 +80,7 @@ public class UserDAOMysql implements UserDAO {
             user.setEmail(resultSet.getString("email"));
             user.setPassword(resultSet.getString("password"));
             user.setAccountActive(resultSet.getBoolean("account_active"));
+            user.setRole(Role.valueOf(resultSet.getString("role_name").toUpperCase()));
             return user;
         }
 

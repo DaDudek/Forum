@@ -2,6 +2,7 @@ package forum.controller;
 
 import forum.model.Comment;
 import forum.model.Post;
+import forum.model.Role;
 import forum.model.User;
 import forum.service.CommentService;
 import forum.service.CommentVoteService;
@@ -31,7 +32,7 @@ public class DeleteCommentController extends HttpServlet {
             CommentService commentService = new CommentService();
             Comment comment = commentService.readComment(commentId);
             Post post = postService.readPost(postId);
-            if (comment.getUserId() == user.getUserId()) {
+            if((comment.getUserId() == user.getUserId()) || (user.getRole().equals(Role.valueOf("ADMIN")))){
                 commentVoteService.deleteCommentAllVotes(Integer.parseInt(request.getParameter("comment-id")));
                 commentService.deleteComment(Integer.parseInt(request.getParameter("comment-id")));
                 response.sendRedirect(request.getContextPath()+"/post?post-id="+request.getParameter("post-id"));
