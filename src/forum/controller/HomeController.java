@@ -38,9 +38,7 @@ public class HomeController extends HttpServlet {
                 request.setAttribute("lastPageNumber", pages.size());
                 request.setAttribute("posts", posts);
                 request.setAttribute("pages", pages);
-                System.out.println(pageNumber <= 0);
-                System.out.println(pageNumber);
-                request.getSession().setAttribute("url", "/page=" + pageNumber);
+                request.getSession().setAttribute("url", "?page=" + pageNumber);
                 request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
             }
         }catch (NumberFormatException e){
