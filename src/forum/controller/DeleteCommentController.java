@@ -25,16 +25,15 @@ public class DeleteCommentController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try{
             int commentId = Integer.parseInt(request.getParameter("comment-id"));
-            int postId = Integer.parseInt(request.getParameter("post-id"));
-            User user = (User) request.getSession().getAttribute("user");
-            CommentVoteService commentVoteService = new CommentVoteService();
-            PostService postService = new PostService();
+
+
             CommentService commentService = new CommentService();
+            User user = (User) request.getSession().getAttribute("user");
+
             Comment comment = commentService.readComment(commentId);
-            Post post = postService.readPost(postId);
+
             if((comment.getUserId() == user.getUserId()) || (user.getRole().equals(Role.valueOf("ADMIN")))){
-                commentVoteService.deleteCommentAllVotes(Integer.parseInt(request.getParameter("comment-id")));
-                commentService.deleteComment(Integer.parseInt(request.getParameter("comment-id")));
+                deleteComment(commentId);
                 response.sendRedirect(request.getContextPath()+"/post?post-id="+request.getParameter("post-id"));
             }
             else {
@@ -44,5 +43,12 @@ public class DeleteCommentController extends HttpServlet {
             response.sendError(404);
         }
 
+    }
+    private void deleteComment(int commentId){
+        CommentVoteService commentVoteService = new CommentVoteService();
+        CommentService commentService = new CommentService();
+
+        commentVoteService.deleteCommentAllVotes(commentId);
+        commentService.deleteComment(commentId);
     }
 }

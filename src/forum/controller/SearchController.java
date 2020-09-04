@@ -1,5 +1,6 @@
 package forum.controller;
 
+import forum.logic.PaginationHandler;
 import forum.model.Post;
 import forum.model.PostSort;
 import forum.service.PostService;
@@ -32,21 +33,19 @@ public class SearchController extends HttpServlet {
                 String postSort = request.getParameter("sort");
                 String keywords = request.getParameter("keywords");
                 PostSort.valueOf(returnPostSortName(postSort));
-                List<Post> allPosts = postService.searchPostsByKeywords(keywords, returnPostSortName(postSort));
-                int pageNumber = 0;
-                if (request.getParameter("page") == null) {
-                    request.setAttribute("pageNumber", 1);
-                    pageNumber = 1;
-                } else {
-                    pageNumber = Integer.parseInt(request.getParameter("page"));
-                    request.setAttribute("pageNumber", pageNumber);
-                }
-                List<Integer> pages = initPagesNumber(allPosts);
+                PaginationHandler<Post> paginationHandler = new PaginationHandler<>();
+
+                List<Post> posts = postService.searchPostsByKeywords(keywords, returnPostSortName(postSort));
+                int pageNumber = paginationHandler.initPageNumber(request.getParameter("page"));
+                request.setAttribute("pageNumber", pageNumber);
+
+                List<Integer> pages = paginationHandler.setPagesList(posts
+                );
                 if (pageNumber > pages.size() || pageNumber <= 0){
                     response.sendError(404);
                 } else {
-                    List<Post> posts = postService.readPostWithPageSize(HOW_MANY_POSTS_IN_ONE_PAGE, pageNumber);
-                    request.setAttribute("posts", posts);
+                    List<Post> postsOnPage = paginationHandler.setPublicationOnPage(posts,pageNumber);
+                    request.setAttribute("posts", postsOnPage);
                     request.setAttribute("postSort",postSort);
                     request.setAttribute("keywords",keywords);
                     request.setAttribute("pages",pages);
@@ -74,18 +73,5 @@ public class SearchController extends HttpServlet {
         return null;
     }
 
-    private List<Integer> initPagesNumber(List<Post> posts){
-        int counter = 1;
-        int size = posts.size();
-        List<Integer> pages = new ArrayList<>();
-        pages.add(counter);
-        size = size - HOW_MANY_POSTS_IN_ONE_PAGE;
-        while (size > 0){
-            counter++;
-            pages.add(counter);
-            size = size - HOW_MANY_POSTS_IN_ONE_PAGE;
-        }
-        return pages;
-    }
 
 }

@@ -25,19 +25,8 @@ public class EditPostController extends HttpServlet {
         String description = request.getParameter("inputDescription");
         String message = request.getParameter("inputMessage");
         User user = (User) request.getSession().getAttribute("user");
-        PostService postService = new PostService();
-        Post post = postService.readPost(Integer.parseInt(request.getParameter("post-id")));
-        Post updatedPost = new Post();
-        updatedPost.setTitle(title);
-        updatedPost.setDescription(description);
-        updatedPost.setNegativeVote(post.getNegativeVote());
-        updatedPost.setPositiveVote(post.getPositiveVote());
-        updatedPost.setUser(new User(user));
-        updatedPost.setDate(new Timestamp(new Date().getTime()));
-        updatedPost.setPostId(Integer.parseInt(request.getParameter("post-id")));
-        updatedPost.setMessage(message);
-
-        postService.updatePost(updatedPost);
+        int postId = Integer.parseInt(request.getParameter("post-id"));
+        updatePost(title,description,message,user,postId);
         request.removeAttribute("isEditing");
         response.sendRedirect(request.getContextPath()+"/post?post-id="+request.getParameter("post-id"));
         }
@@ -45,13 +34,17 @@ public class EditPostController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            int postId = Integer.parseInt(request.getParameter("post-id"));
             PostService postService = new PostService();
             CommentService commentService = new CommentService();
-            Post post = postService.readPost(Integer.parseInt(request.getParameter("post-id")));
             User user = (User) request.getSession().getAttribute("user");
-            List<Comment> comments = commentService.readPostAllComment(Integer.parseInt(request.getParameter("post-id")));
+
+            Post post = postService.readPost(postId);
+            List<Comment> comments = commentService.readPostAllComment(postId);
+
             request.setAttribute("post", post);
             request.setAttribute("comments", comments);
+
             if (user.getUserId() == post.getUser().getUserId()){
                 request.setAttribute("isEditing", "true");
                 request.getRequestDispatcher("WEB-INF/post.jsp").forward(request, response);
@@ -63,5 +56,21 @@ public class EditPostController extends HttpServlet {
         catch (NumberFormatException | EmptyResultDataAccessException e){
             response.sendError(404);
         }
+    }
+
+    private void updatePost(String title, String description, String message, User user, int postId){
+        PostService postService = new PostService();
+        Post post = postService.readPost(postId);
+        Post updatedPost = new Post();
+        updatedPost.setTitle(title);
+        updatedPost.setDescription(description);
+        updatedPost.setNegativeVote(post.getNegativeVote());
+        updatedPost.setPositiveVote(post.getPositiveVote());
+        updatedPost.setUser(new User(user));
+        updatedPost.setDate(new Timestamp(new Date().getTime()));
+        updatedPost.setPostId(postId);
+        updatedPost.setMessage(message);
+
+        postService.updatePost(updatedPost);
     }
 }

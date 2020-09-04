@@ -22,18 +22,9 @@ public class EditCommentController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String message = request.getParameter("inputMessage");
         User user = (User) request.getSession().getAttribute("user");
-        CommentService commentService = new CommentService();
-        Comment comment = commentService.readComment(Integer.parseInt(request.getParameter("comment-id")));
-        Comment updatedComment = new Comment();
-        updatedComment.setAuthor(user.getUsername());
-        updatedComment.setDate(comment.getDate());
-        updatedComment.setCommentId(Integer.parseInt(request.getParameter("comment-id")));
-        updatedComment.setMessage(message);
-        updatedComment.setPositiveVote(comment.getPositiveVote());
-        updatedComment.setNegativeVote(comment.getNegativeVote());
-        updatedComment.setPostId(Integer.parseInt(request.getParameter("post-id")));
-        updatedComment.setUserId(user.getUserId());
-        commentService.updateComment(updatedComment);
+        int postId = Integer.parseInt(request.getParameter("post-id"));
+        int commentId = Integer.parseInt(request.getParameter("comment-id"));
+        updateComment(user,message,postId,commentId);
         request.removeAttribute("commentEditingId");
         response.sendRedirect(request.getContextPath()+"/post?post-id="+request.getParameter("post-id"));
 
@@ -44,12 +35,15 @@ public class EditCommentController extends HttpServlet {
         try {
             int commentId = Integer.parseInt(request.getParameter("comment-id"));
             int postId = Integer.parseInt(request.getParameter("post-id"));
+
             PostService postService = new PostService();
             CommentService commentService = new CommentService();
+            User user = (User) request.getSession().getAttribute("user");
+
             Post post = postService.readPost(postId);
             Comment comment = commentService.readComment(commentId);
-            User user = (User) request.getSession().getAttribute("user");
-            List<Comment> comments = commentService.readPostAllComment(Integer.parseInt(request.getParameter("post-id")));
+            List<Comment> comments = commentService.readPostAllComment(postId);
+
             request.setAttribute("post", post);
             request.setAttribute("comments", comments);
             if (comment.getUserId() == user.getUserId()){
@@ -63,5 +57,20 @@ public class EditCommentController extends HttpServlet {
         catch (NumberFormatException | EmptyResultDataAccessException e){
             response.sendError(404);
         }
+    }
+
+    private void updateComment(User user, String message, int postId, int commentId){
+        CommentService commentService = new CommentService();
+        Comment comment = commentService.readComment(commentId);
+        Comment updatedComment = new Comment();
+        updatedComment.setAuthor(user.getUsername());
+        updatedComment.setDate(comment.getDate());
+        updatedComment.setCommentId(commentId);
+        updatedComment.setMessage(message);
+        updatedComment.setPositiveVote(comment.getPositiveVote());
+        updatedComment.setNegativeVote(comment.getNegativeVote());
+        updatedComment.setPostId(postId);
+        updatedComment.setUserId(user.getUserId());
+        commentService.updateComment(updatedComment);
     }
 }

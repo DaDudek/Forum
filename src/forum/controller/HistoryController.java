@@ -25,8 +25,10 @@ public class HistoryController extends HttpServlet {
         PostService postService = new PostService();
         CommentService commentService  = new CommentService();
         User user = (User) request.getSession().getAttribute("user");
+
         List<Post> posts = postService.readUserPostHistory(user.getUserId());
         List<Comment> comments = commentService.readUserAllComment(user.getUserId());
+
         request.setAttribute("posts",posts);
         request.setAttribute("comments", comments);
         request.getRequestDispatcher("WEB-INF/history.jsp").forward(request,response);

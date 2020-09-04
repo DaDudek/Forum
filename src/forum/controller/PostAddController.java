@@ -19,13 +19,10 @@ public class PostAddController extends HttpServlet {
         String description = request.getParameter("inputDescription");
         String message = request.getParameter("inputMessage");
         User user = (User) request.getSession().getAttribute("user");
-        if (request.getUserPrincipal() != null){
-            PostService postService = new PostService();
-            postService.createPost(title,description,message,user);
-            response.sendRedirect(request.getContextPath()+"/");
-        }else {
-            response.sendError(403);
-        }
+        PostService postService = new PostService();
+        postService.createPost(title,description,message,user);
+        response.sendRedirect(request.getContextPath()+"/");
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
