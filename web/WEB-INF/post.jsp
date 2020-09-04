@@ -24,8 +24,8 @@
                 <a href="${pageContext.request.contextPath}/vote?post_id=${requestScope.post.postId}&is_positive=false&post-page=true" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
             </div>
             <div class="col col-md-11 col-sm-10">
-                <h3 class="centered"><a href="#"><c:out value="${requestScope.post.title}" /></a></h3>
-                <h6><small style="color:#171716">Dodane przez: <c:out value="${requestScope.post.user.username}" />  <fmt:formatDate value="${requestScope.post.date}" pattern="dd/MM/YYYY"/></small></h6>
+                <h2 class="centered"><c:out value="${requestScope.post.title}" /></h2>
+                <h3><small style="color:#171716">Add by: <c:out value="${requestScope.post.user.username}" />  <fmt:formatDate value="${requestScope.post.date}" pattern="dd/MM/YYYY"/></small></h3>
                 <c:choose>
                     <c:when test="${requestScope.isEditing != null}">
                         <form class="form-signin" method="post" action="edit-post?post-id=${requestScope.post.postId}">
@@ -45,11 +45,11 @@
                 </c:choose>
 
                 <c:if test="${(requestScope.post.user.userId ==  sessionScope.user.userId) or (sessionScope.user.role.name() eq 'ADMIN' )}">
-                    <a href="${pageContext.request.contextPath}/delete-post?post_id=${requestScope.post.postId}"><button class="btn btn-danger btn-xs">Usuń post</button></a>
+                    <a href="${pageContext.request.contextPath}/delete-post?post_id=${requestScope.post.postId}"><button class="btn btn-danger btn-xs">Delete post</button></a>
                 </c:if>
                 <c:if test="${requestScope.post.user.userId ==  sessionScope.user.userId}">
                     <c:if test="${requestScope.isEditing == null}">
-                            <a href="${pageContext.request.contextPath}/edit-post?post-id=${requestScope.post.postId}"><button class="btn btn-warning btn-xs">Edytuj post</button></a>
+                            <a href="${pageContext.request.contextPath}/edit-post?post-id=${requestScope.post.postId}"><button class="btn btn-warning btn-xs">Edit post</button></a>
                     </c:if>
                 </c:if>
             </div>
@@ -65,7 +65,7 @@
                             <a href="${pageContext.request.contextPath}/comment-vote?post_id=${comment.postId}&is_positive=false&comment_id=${comment.commentId}&post-page=true" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
                         </div>
                         <div class="col col-md-11 col-sm-10">
-                            <h6><small style="color:#171716">Dodane przez: <c:out value="${comment.author}" />  <fmt:formatDate value="${comment.date}" pattern="dd/MM/YYYY"/></small></h6>
+                            <h6><small style="color:#171716">Add by: <c:out value="${comment.author}" />  <fmt:formatDate value="${comment.date}" pattern="dd/MM/YYYY"/></small></h6>
                             <c:choose>
                                 <c:when test="${requestScope.commentEditingId == comment.commentId}">
                                     <form class="form-signin" method="post" action="edit-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}">
@@ -82,11 +82,11 @@
                         </div>
 
                         <c:if test="${(comment.userId ==  sessionScope.user.userId) or sessionScope.user.role.name() eq 'ADMIN' }">
-                            <a href="${pageContext.request.contextPath}/delete-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}"><button class="btn btn-danger btn-xs">Usuń komentarz</button></a>
+                            <a href="${pageContext.request.contextPath}/delete-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}"><button class="btn btn-danger btn-xs">Delete comment</button></a>
                         </c:if>
                         <c:if test="${comment.userId ==  sessionScope.user.userId}">
                             <c:if test="${requestScope.isEditing == null}">
-                                <a href="${pageContext.request.contextPath}/edit-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}"><button class="btn btn-warning btn-xs">Edytuj komentarz</button></a>
+                                <a href="${pageContext.request.contextPath}/edit-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}"><button class="btn btn-warning btn-xs">Edit comment</button></a>
                             </c:if>
                         </c:if>
                     </div>
@@ -102,6 +102,7 @@
                               placeholder="post comment - max 500 character" required autofocus></textarea>
                     <input class="btn btn-lg btn-success btn-block" type="submit"
                            value="add comment" />
+                </form>
             </div>
         </c:if>
 

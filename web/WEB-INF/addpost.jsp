@@ -18,7 +18,7 @@
 <div class="container">
     <div class="col-md-8 col-md-offset-2">
         <form class="form-signin" method="post" action="new-post">
-            <h2 class="form-signin-heading">Dodaj nowe znalezisko</h2>
+            <h2 class="form-signin-heading">Add new post</h2>
             <input name="inputTitle" type="text" class="form-control" placeholder="post title max 60 character"
                    required autofocus />
             <textarea name="inputDescription" rows="5" class="form-control"

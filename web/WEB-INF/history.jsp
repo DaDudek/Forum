@@ -18,7 +18,7 @@
 
 
 <c:if test="${not empty requestScope.posts}">
-    <h1>Posty</h1>
+    <h1>Posts</h1>
     <c:forEach var="post" items="${requestScope.posts}">
         <div class="container">
             <div class="row bs-callout bs-callout-warning">
@@ -28,11 +28,11 @@
                     <a href="${pageContext.request.contextPath}/vote?post_id=${post.postId}&is_positive=false" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
                 </div>
                 <div class="col col-md-11 col-sm-10">
-                    <h3 class="centered"><a href="${pageContext.request.contextPath}/post?post-id=${post.postId}"><c:out value="${post.title}" /></a></h3>
-                    <h6><small style="color:#171716">Dodane przez: <c:out value="${post.user.username}" />  <fmt:formatDate value="${post.date}" pattern="dd/MM/YYYY"/></small></h6>
+                    <h2 class="centered"><a href="${pageContext.request.contextPath}/post?post-id=${post.postId}"><c:out value="${post.title}" /></a></h2>
+                    <h3><small style="color:#171716">Add by: <c:out value="${post.user.username}" />  <fmt:formatDate value="${post.date}" pattern="dd/MM/YYYY"/></small></h3>
                     <p> <c:out value="${post.description}" /></p>
-                    <a href="${pageContext.request.contextPath}/delete-post?post_id=${post.postId}"><button class="btn btn-danger btn-xs">Usuń post</button></a>
-                    <a href="${pageContext.request.contextPath}/edit-post?post-id=${post.postId}"><button class="btn btn-warning btn-xs">Edytuj post</button></a>
+                    <a href="${pageContext.request.contextPath}/delete-post?post_id=${post.postId}"><button class="btn btn-danger btn-xs">Delete post</button></a>
+                    <a href="${pageContext.request.contextPath}/edit-post?post-id=${post.postId}"><button class="btn btn-warning btn-xs">Edit post</button></a>
                 </div>
             </div>
         </div>
@@ -40,7 +40,7 @@
 </c:if>
 
 <c:if test="${not empty requestScope.comments}">
-    <h1>Komentarze</h1>
+    <h1>Comments</h1>
     <c:forEach var="comment" items="${requestScope.comments}">
         <div class="container">
             <div class="row bs-callout bs-callout-warning">
@@ -50,12 +50,12 @@
                     <a href="${pageContext.request.contextPath}/comment-vote?post_id=${comment.postId}&is_positive=false&comment_id=${comment.commentId}&post-page=true" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
                 </div>
                 <div class="col col-md-11 col-sm-10">
-                    <h6><small style="color:#171716">Dodane przez: <c:out value="${comment.author}" />  <fmt:formatDate value="${comment.date}" pattern="dd/MM/YYYY"/></small></h6>
+                    <h3><small style="color:#171716">Add by: <c:out value="${comment.author}" />  <fmt:formatDate value="${comment.date}" pattern="dd/MM/YYYY"/></small></h3>
                     <p> <c:out value="${comment.message}" /></p>
                 </div>
-                <a href="${pageContext.request.contextPath}/delete-comment?comment-id=${comment.commentId}&post-id=${comment.postId}"><button class="btn btn-danger btn-xs">Usuń komentarz</button></a>
-                <a href="${pageContext.request.contextPath}/edit-comment?comment-id=${comment.commentId}&post-id=${comment.postId}"><button class="btn btn-warning btn-xs">Edytuj komentarz</button></a>
-                <a href="${pageContext.request.contextPath}/post?post-id=${comment.postId}"><button class="btn btn-info btn-xs">Przejdź do strony</button></a>
+                <a href="${pageContext.request.contextPath}/delete-comment?comment-id=${comment.commentId}&post-id=${comment.postId}"><button class="btn btn-danger btn-xs">Delete comment</button></a>
+                <a href="${pageContext.request.contextPath}/edit-comment?comment-id=${comment.commentId}&post-id=${comment.postId}"><button class="btn btn-warning btn-xs">Edit comment</button></a>
+                <a href="${pageContext.request.contextPath}/post?post-id=${comment.postId}"><button class="btn btn-info btn-xs">Go to post page</button></a>
             </div>
         </div>
     </c:forEach>
