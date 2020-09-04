@@ -19,7 +19,7 @@ public class HomeController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
+        try { // przebudowac to aby edycja nie byla po stronie bazy - lepiej przeczytac x pozycji z posortowanej niz sortowac 2 razy
             PostService postService = new PostService();
             List<Post> allPosts = postService.readPosts("ORDER_BY_NEWEST");
             int pageNumber = 0;

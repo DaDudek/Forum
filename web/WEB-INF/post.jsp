@@ -107,6 +107,57 @@
 
     </div>
 
+<div class="text-center">
+    <nav aria-label="...">
+        <ul class="pagination">
+            <c:choose>
+                <c:when test="${requestScope.pageNumber == 1}">
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li class="page-item">
+                        <a class="page-link" href="${pageContext.request.contextPath}/post?post-id=${requestScope.post.postId}&page=${requestScope.pageNumber-1}">Previous</a>
+                    </li>
+                </c:otherwise>
+            </c:choose>
+
+            <c:forEach var="page" items="${requestScope.pages}">
+                <c:choose>
+                    <c:when test="${page == requestScope.pageNumber}">
+                        <li class="page-item active">
+                            <span class="page-link">
+                                <c:out value="${page.toString()}" />
+                                <span class="sr-only">(current)</span>
+                            </span>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="page-item">
+                            <a class="page-link" href="${pageContext.request.contextPath}/post?post-id=${requestScope.post.postId}&page=${page}"><c:out value="${page.toString()}" /></a>
+                        </li>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+
+            <c:choose>
+                <c:when test="${requestScope.pageNumber == requestScope.lastPageNumber}">
+                    <li class="page-item disabled">
+                        <span class="page-link">Next</span>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li class="page-item">
+                        <a class="page-link" href="${pageContext.request.contextPath}/post?post-id=${requestScope.post.postId}&page=${requestScope.pageNumber+1}">Next</a>
+                    </li>
+                </c:otherwise>
+            </c:choose>
+        </ul>
+    </nav>
+</div>
+
+
 
 <jsp:include page="fragments/footer.jsp" />
 
