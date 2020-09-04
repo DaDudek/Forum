@@ -19,6 +19,12 @@ public class PostService {
         postDAO.create(post);
     }
 
+    public List<Post> readPostWithPageSize(int pageSize, int pageNumber){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        PostDAO postDAO =factory.getPostDAO();
+        return postDAO.readPostWithPageSize(pageSize, pageNumber);
+    }
+
     public List<Post> readPosts(String postSort){
         DAOFactory factory = DAOFactory.getDAOFactory();
         PostDAO postDAO = factory.getPostDAO();

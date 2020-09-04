@@ -14,4 +14,6 @@ public interface PostDAO extends GenericDAO<Post, Integer>{
 
     List<Post> getUserPosts(Integer user_id);
 
+    List<Post>  readPostWithPageSize(int pageSize, int pageNumber);
+
 }

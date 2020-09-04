@@ -33,6 +33,12 @@ public class PostDAOMysql implements PostDAO{
                     "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
                     "ORDER BY date DESC"; //the newest post will be first
 
+
+    private static final String READ_WITH_PAGE_SIZE_AND_SORT_BY_NEWEST =
+            "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
+                    "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
+                    "ORDER BY date DESC LIMIT :page_size OFFSET :page_number ";
+
     private static final String READ_ALL_AND_SORT_BY_OLDEST =
             "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
                     "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
@@ -157,6 +163,15 @@ public class PostDAOMysql implements PostDAO{
         SqlParameterSource parameterSource = new MapSqlParameterSource(map);
         return template.query(READ_USER_ALL_POSTS_AND_SORT_BY_NEWEST,parameterSource, new PostRowMapper());
 
+    }
+
+    @Override
+    public List<Post> readPostWithPageSize(int pageSize, int pageNumber) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("page_size", pageSize);
+        map.put("page_number",(pageNumber - 1) * 5);
+        SqlParameterSource parameterSource = new MapSqlParameterSource(map);
+        return template.query(READ_WITH_PAGE_SIZE_AND_SORT_BY_NEWEST,parameterSource, new PostRowMapper());
     }
 
 

@@ -47,7 +47,7 @@
                 </c:when>
                 <c:otherwise>
                     <li class="page-item">
-                        <a class="page-link" href="#">Previous</a>
+                        <a class="page-link" href="${pageContext.request.contextPath}/?page=${requestScope.pageNumber-1}">Previous</a>
                     </li>
                 </c:otherwise>
             </c:choose>
@@ -63,7 +63,9 @@
                         </li>
                     </c:when>
                     <c:otherwise>
-                        <li class="page-item"><a class="page-link" href="#"><c:out value="${page.toString()}" /></a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="${pageContext.request.contextPath}/?page=${page.toString()}"><c:out value="${page.toString()}" /></a>
+                        </li>
                     </c:otherwise>
                 </c:choose>
             </c:forEach>
@@ -76,7 +78,7 @@
                 </c:when>
                 <c:otherwise>
                     <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
+                        <a class="page-link" href="${pageContext.request.contextPath}/?page=${requestScope.pageNumber+1}">Next</a>
                     </li>
                 </c:otherwise>
             </c:choose>

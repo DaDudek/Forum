@@ -19,26 +19,44 @@ public class HomeController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getSession().setAttribute("url","/");
-        PostService postService = new PostService();
-        List<Post> posts = postService.readPosts("ORDER_BY_NEWEST");
-        if (request.getParameter("page") == null){
-            request.setAttribute("pageNumber", 1);
+        try {
+            PostService postService = new PostService();
+            List<Post> allPosts = postService.readPosts("ORDER_BY_NEWEST");
+            int pageNumber = 0;
+            if (request.getParameter("page") == null) {
+                request.setAttribute("pageNumber", 1);
+                pageNumber = 1;
+            } else {
+                pageNumber = Integer.parseInt(request.getParameter("page"));
+                request.setAttribute("pageNumber", pageNumber);
+            }
+            List<Integer> pages = initPagesNumber(allPosts);
+            if (pageNumber > pages.size() || pageNumber <= 0){
+                response.sendError(404);
+            } else{
+                List<Post> posts = postService.readPostWithPageSize(HOW_MANY_POSTS_IN_ONE_PAGE, pageNumber);
+                request.setAttribute("lastPageNumber", pages.size());
+                request.setAttribute("posts", posts);
+                request.setAttribute("pages", pages);
+                System.out.println(pageNumber <= 0);
+                System.out.println(pageNumber);
+                request.getSession().setAttribute("url", "/page=" + pageNumber);
+                request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
+            }
+        }catch (NumberFormatException e){
+            response.sendError(404);
         }
-        request.setAttribute("lastPageNumber", initPagesNumber(posts).size());
-        request.setAttribute("posts",posts);
-        request.setAttribute("pages",initPagesNumber(posts));
-        request.getRequestDispatcher("WEB-INF/index.jsp").forward(request,response);
     }
     private List<Integer> initPagesNumber(List<Post> posts){
         int counter = 1;
         int size = posts.size();
         List<Integer> pages = new ArrayList<>();
         pages.add(counter);
-        while (size / HOW_MANY_POSTS_IN_ONE_PAGE > 0){
+        size = size - HOW_MANY_POSTS_IN_ONE_PAGE;
+        while (size > 0){
             counter++;
             pages.add(counter);
-            size = size / HOW_MANY_POSTS_IN_ONE_PAGE;
+            size = size - HOW_MANY_POSTS_IN_ONE_PAGE;
         }
         return pages;
     }
