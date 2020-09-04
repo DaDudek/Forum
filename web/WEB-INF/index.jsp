@@ -37,20 +37,54 @@
   </c:if>
 
 <div class="text-center">
-  <nav aria-label="Page navigation example" >
-    <ul class="pagination justify-content-center">
-      <li class="page-item disabled">
-        <a class="page-link" href="#" tabindex="-1">Previous</a>
-      </li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item">
-        <a class="page-link" href="#">Next</a>
-      </li>
-    </ul>
-  </nav>
+    <nav aria-label="...">
+        <ul class="pagination">
+            <c:choose>
+                <c:when test="${requestScope.pageNumber == 1}">
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Previous</a>
+                    </li>
+                </c:otherwise>
+            </c:choose>
+
+            <c:forEach var="page" items="${requestScope.pages}">
+                <c:choose>
+                    <c:when test="${page == requestScope.pageNumber}">
+                        <li class="page-item active">
+                            <span class="page-link">
+                                <c:out value="${page.toString()}" />
+                                <span class="sr-only">(current)</span>
+                            </span>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="page-item"><a class="page-link" href="#"><c:out value="${page.toString()}" /></a></li>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+
+            <c:choose>
+                <c:when test="${requestScope.pageNumber == requestScope.lastPageNumber}">
+                    <li class="page-item disabled">
+                        <span class="page-link">Next</span>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </c:otherwise>
+            </c:choose>
+        </ul>
+    </nav>
 </div>
+
+
 <jsp:include page="fragments/footer.jsp" />
 
 <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>

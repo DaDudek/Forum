@@ -22,9 +22,12 @@ public class HomeController extends HttpServlet {
         request.getSession().setAttribute("url","/");
         PostService postService = new PostService();
         List<Post> posts = postService.readPosts("ORDER_BY_NEWEST");
+        if (request.getParameter("page") == null){
+            request.setAttribute("pageNumber", 1);
+        }
+        request.setAttribute("lastPageNumber", initPagesNumber(posts).size());
         request.setAttribute("posts",posts);
         request.setAttribute("pages",initPagesNumber(posts));
-        System.out.println(initPagesNumber(posts));
         request.getRequestDispatcher("WEB-INF/index.jsp").forward(request,response);
     }
     private List<Integer> initPagesNumber(List<Post> posts){
