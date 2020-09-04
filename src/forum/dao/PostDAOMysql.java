@@ -62,6 +62,24 @@ public class PostDAOMysql implements PostDAO{
                     "WHERE title COLLATE UTF8_GENERAL_CI LIKE :keywords OR  description COLLATE UTF8_GENERAL_CI LIKE :keywords "+
                     "ORDER BY date "; //the oldest post will be first
 
+    private static final String READ_BY_KEYWORDS_AND_SORT_BY_VOTE_WITH_SIZE_LIMIT =
+            "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
+                    "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
+                    "WHERE title COLLATE UTF8_GENERAL_CI LIKE :keywords OR  description COLLATE UTF8_GENERAL_CI LIKE :keywords "+
+                    "ORDER BY (positive_vote - negative_vote) DESC LIMIT :page_size OFFSET :page_number "; // the best score post will be first also ignore character case;
+
+    private static final String READ_BY_KEYWORDS_AND_SORT_BY_NEWEST_WITH_SIZE_LIMIT  =
+            "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
+                    "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
+                    "WHERE title COLLATE UTF8_GENERAL_CI LIKE :keywords OR  description COLLATE UTF8_GENERAL_CI LIKE :keywords "+
+                    "ORDER BY date DESC LIMIT :page_size OFFSET :page_number"; //the newest post will be first
+
+    private static final String READ_BY_KEYWORDS_AND_SORT_BY_OLDEST_WITH_SIZE_LIMIT  =
+            "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
+                    "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
+                    "WHERE title COLLATE UTF8_GENERAL_CI LIKE :keywords OR  description COLLATE UTF8_GENERAL_CI LIKE :keywords "+
+                    "ORDER BY date LIMIT :page_size OFFSET :page_number "; //the oldest post will be first
+
     private static final String UPDATE =
             "UPDATE post SET user_id =:user_id, title = :title, description = :description , message = :message , date = :date, " +
                     "positive_vote = :positive_vote, negative_vote = :negative_vote WHERE post_id = :post_id";
@@ -151,6 +169,25 @@ public class PostDAOMysql implements PostDAO{
                 return template.query(READ_BY_KEYWORDS_AND_SORT_BY_VOTE,parameterSource,new PostRowMapper());
             case ORDER_BY_OLDEST:
                 return template.query(READ_BY_KEYWORDS_AND_SORT_BY_OLDEST,parameterSource,new PostRowMapper());
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public List<Post> getByKeywordsWithPageSize(String keywords, PostSort postSort, int pageSize, int pageNumber) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("keywords","%"+keywords+"%");
+        paramMap.put("page_size", pageSize);
+        paramMap.put("page_number",pageNumber);
+        SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
+        switch (postSort){
+            case ORDER_BY_NEWEST:
+                return template.query(READ_BY_KEYWORDS_AND_SORT_BY_NEWEST_WITH_SIZE_LIMIT,parameterSource,new PostRowMapper());
+            case ORDER_BY_BEST_VOTE:
+                return template.query(READ_BY_KEYWORDS_AND_SORT_BY_VOTE_WITH_SIZE_LIMIT,parameterSource,new PostRowMapper());
+            case ORDER_BY_OLDEST:
+                return template.query(READ_BY_KEYWORDS_AND_SORT_BY_OLDEST_WITH_SIZE_LIMIT,parameterSource,new PostRowMapper());
             default:
                 return null;
         }

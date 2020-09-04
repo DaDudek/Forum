@@ -61,6 +61,12 @@ public class PostService {
         return postDAO.getByKeywords(keywords,PostSort.valueOf(postSort));
     }
 
+    public List<Post> searchPostsByKeywordsWithPageSize(String keywords, String postSort, int pageSize, int pageNumber){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        PostDAO postDAO = factory.getPostDAO();
+        return postDAO.getByKeywordsWithPageSize(keywords,PostSort.valueOf(postSort), pageSize, pageNumber);
+    }
+
     private Post initializePost(String title, String description, String message, User user){
         Post post = new Post();
         post.setTitle(title);

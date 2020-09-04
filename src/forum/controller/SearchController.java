@@ -10,10 +10,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/search")
 public class SearchController extends HttpServlet {
+    public static final int HOW_MANY_POSTS_IN_ONE_PAGE = 5;
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.sendRedirect(request.getContextPath()+"/search?sort="+request.getParameter("sort")+"&keywords="+request.getParameter("inputKeywords"));
@@ -29,10 +32,28 @@ public class SearchController extends HttpServlet {
                 String postSort = request.getParameter("sort");
                 String keywords = request.getParameter("keywords");
                 PostSort.valueOf(returnPostSortName(postSort));
-                List<Post> posts = postService.searchPostsByKeywords(keywords, returnPostSortName(postSort));
-                request.setAttribute("posts", posts);
-                request.getSession().setAttribute("url","/search?sort="+postSort+"&keywords="+keywords);
-                request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
+                List<Post> allPosts = postService.searchPostsByKeywords(keywords, returnPostSortName(postSort));
+                int pageNumber = 0;
+                if (request.getParameter("page") == null) {
+                    request.setAttribute("pageNumber", 1);
+                    pageNumber = 1;
+                } else {
+                    pageNumber = Integer.parseInt(request.getParameter("page"));
+                    request.setAttribute("pageNumber", pageNumber);
+                }
+                List<Integer> pages = initPagesNumber(allPosts);
+                if (pageNumber > pages.size() || pageNumber <= 0){
+                    response.sendError(404);
+                } else {
+                    List<Post> posts = postService.readPostWithPageSize(HOW_MANY_POSTS_IN_ONE_PAGE, pageNumber);
+                    request.setAttribute("posts", posts);
+                    request.setAttribute("postSort",postSort);
+                    request.setAttribute("keywords",keywords);
+                    request.setAttribute("pages",pages);
+                    request.setAttribute("lastPageNumber",pages.size());
+                    request.getSession().setAttribute("url", "/search?sort=" + postSort + "&keywords=" + keywords+"&page="+pageNumber);
+                    request.getRequestDispatcher("WEB-INF/showsearch.jsp").forward(request, response);
+                }
             } catch (IllegalArgumentException e){
                 response.sendError(404);
             }
@@ -52,4 +73,19 @@ public class SearchController extends HttpServlet {
         }
         return null;
     }
+
+    private List<Integer> initPagesNumber(List<Post> posts){
+        int counter = 1;
+        int size = posts.size();
+        List<Integer> pages = new ArrayList<>();
+        pages.add(counter);
+        size = size - HOW_MANY_POSTS_IN_ONE_PAGE;
+        while (size > 0){
+            counter++;
+            pages.add(counter);
+            size = size - HOW_MANY_POSTS_IN_ONE_PAGE;
+        }
+        return pages;
+    }
+
 }
