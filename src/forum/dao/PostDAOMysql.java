@@ -23,26 +23,10 @@ public class PostDAOMysql implements PostDAO{
             "INSERT INTO post(user_id, title, description, message, date, positive_vote, negative_vote) " +
                     "VALUES(:user_id, :title, :description, :message, :date, :positive_vote, :negative_vote)";
 
-    private static final String READ_ALL_AND_SORT_BY_VOTE =
-            "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
-                    "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
-                    "ORDER BY (positive_vote - negative_vote) DESC"; // the best score post will be first;
-
     private static final String READ_ALL_AND_SORT_BY_NEWEST =
             "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
                     "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
                     "ORDER BY date DESC"; //the newest post will be first
-
-
-    private static final String READ_WITH_PAGE_SIZE_AND_SORT_BY_NEWEST =
-            "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
-                    "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
-                    "ORDER BY date DESC LIMIT :page_size OFFSET :page_number ";
-
-    private static final String READ_ALL_AND_SORT_BY_OLDEST =
-            "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
-                    "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
-                    "ORDER BY date "; //the oldest post will be first
 
     private static final String READ_BY_KEYWORDS_AND_SORT_BY_VOTE =
             "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
@@ -61,24 +45,6 @@ public class PostDAOMysql implements PostDAO{
                     "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
                     "WHERE title COLLATE UTF8_GENERAL_CI LIKE :keywords OR  description COLLATE UTF8_GENERAL_CI LIKE :keywords "+
                     "ORDER BY date "; //the oldest post will be first
-
-    private static final String READ_BY_KEYWORDS_AND_SORT_BY_VOTE_WITH_SIZE_LIMIT =
-            "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
-                    "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
-                    "WHERE title COLLATE UTF8_GENERAL_CI LIKE :keywords OR  description COLLATE UTF8_GENERAL_CI LIKE :keywords "+
-                    "ORDER BY (positive_vote - negative_vote) DESC LIMIT :page_size OFFSET :page_number "; // the best score post will be first also ignore character case;
-
-    private static final String READ_BY_KEYWORDS_AND_SORT_BY_NEWEST_WITH_SIZE_LIMIT  =
-            "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
-                    "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
-                    "WHERE title COLLATE UTF8_GENERAL_CI LIKE :keywords OR  description COLLATE UTF8_GENERAL_CI LIKE :keywords "+
-                    "ORDER BY date DESC LIMIT :page_size OFFSET :page_number"; //the newest post will be first
-
-    private static final String READ_BY_KEYWORDS_AND_SORT_BY_OLDEST_WITH_SIZE_LIMIT  =
-            "SELECT post_id, post.user_id, title, description, message, date, positive_vote, negative_vote, " +
-                    "username, email, account_active, password FROM post INNER JOIN user ON post.user_id = user.user_id " +
-                    "WHERE title COLLATE UTF8_GENERAL_CI LIKE :keywords OR  description COLLATE UTF8_GENERAL_CI LIKE :keywords "+
-                    "ORDER BY date LIMIT :page_size OFFSET :page_number "; //the oldest post will be first
 
     private static final String UPDATE =
             "UPDATE post SET user_id =:user_id, title = :title, description = :description , message = :message , date = :date, " +
@@ -146,12 +112,8 @@ public class PostDAOMysql implements PostDAO{
     public List<Post> getAll(PostSort postSort)
     {
         switch (postSort) {
-            case ORDER_BY_OLDEST:
-                return template.query(READ_ALL_AND_SORT_BY_OLDEST, new PostRowMapper());
             case ORDER_BY_NEWEST:
                 return template.query(READ_ALL_AND_SORT_BY_NEWEST, new PostRowMapper());
-            case ORDER_BY_BEST_VOTE:
-                return template.query(READ_ALL_AND_SORT_BY_VOTE, new PostRowMapper());
             default:
                 return null;
         }
@@ -175,25 +137,6 @@ public class PostDAOMysql implements PostDAO{
     }
 
     @Override
-    public List<Post> getByKeywordsWithPageSize(String keywords, PostSort postSort, int pageSize, int pageNumber) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("keywords","%"+keywords+"%");
-        paramMap.put("page_size", pageSize);
-        paramMap.put("page_number",pageNumber);
-        SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
-        switch (postSort){
-            case ORDER_BY_NEWEST:
-                return template.query(READ_BY_KEYWORDS_AND_SORT_BY_NEWEST_WITH_SIZE_LIMIT,parameterSource,new PostRowMapper());
-            case ORDER_BY_BEST_VOTE:
-                return template.query(READ_BY_KEYWORDS_AND_SORT_BY_VOTE_WITH_SIZE_LIMIT,parameterSource,new PostRowMapper());
-            case ORDER_BY_OLDEST:
-                return template.query(READ_BY_KEYWORDS_AND_SORT_BY_OLDEST_WITH_SIZE_LIMIT,parameterSource,new PostRowMapper());
-            default:
-                return null;
-        }
-    }
-
-    @Override
     public List<Post> getUserPosts(Integer user_id) {
         Map<String, Object> map = new HashMap<>();
         map.put("user_id", user_id);
@@ -202,14 +145,6 @@ public class PostDAOMysql implements PostDAO{
 
     }
 
-    @Override
-    public List<Post> readPostWithPageSize(int pageSize, int pageNumber) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("page_size", pageSize);
-        map.put("page_number",(pageNumber - 1) * 5);
-        SqlParameterSource parameterSource = new MapSqlParameterSource(map);
-        return template.query(READ_WITH_PAGE_SIZE_AND_SORT_BY_NEWEST,parameterSource, new PostRowMapper());
-    }
 
 
     private Map<String, Object> mapPost(Post post){

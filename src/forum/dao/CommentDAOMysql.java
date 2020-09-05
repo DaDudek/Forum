@@ -1,7 +1,6 @@
 package forum.dao;
 
 import forum.model.Comment;
-import forum.model.Post;
 import forum.util.ConnectionProvider;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -73,10 +72,7 @@ public class CommentDAOMysql  implements CommentDAO{
     public boolean update(Comment updateObject) {
         Map<String, Object> map = mapComment(updateObject);
         SqlParameterSource parameterSource = new MapSqlParameterSource(map);
-        if (template.update(UPDATE, parameterSource) == 1){
-            return true;
-        }
-        return false;
+        return template.update(UPDATE, parameterSource) == 1;
     }
 
     @Override
