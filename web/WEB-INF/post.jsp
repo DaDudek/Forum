@@ -57,6 +57,7 @@
 
         <c:if test="${not empty requestScope.comments}">
             <c:forEach var="comment" items="${requestScope.comments}">
+                <c:set var="commentsResponse" value="${comment.firstChildrenList}" scope="request"/>
                 <div class="container">
                     <div class="row bs-callout bs-callout-warning">
                         <div class="col col-md-1 col-sm-2">
@@ -90,6 +91,7 @@
                             </c:if>
                         </c:if>
                     </div>
+                    <jsp:include page="fragments/response.jsp" />
                 </div>
             </c:forEach>
         </c:if>

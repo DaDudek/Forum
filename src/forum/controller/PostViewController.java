@@ -5,6 +5,7 @@ import forum.model.Comment;
 import forum.model.Post;
 import forum.service.CommentService;
 import forum.service.PostService;
+import org.springframework.asm.SpringAsmInfo;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import javax.servlet.ServletException;
@@ -40,7 +41,9 @@ public class PostViewController extends HttpServlet {
                 response.sendError(404);
             } else {
                 List<Comment> commentInPage = paginationHandler.setPublicationOnPage(comments, pageNumber);
-
+                for (Comment comment : commentInPage) {
+                    setCommentsChildren(comment);
+                }
                 request.setAttribute("pageNumber", pageNumber);
                 request.setAttribute("lastPageNumber",pages.size());
                 request.setAttribute("post", post);
@@ -52,6 +55,20 @@ public class PostViewController extends HttpServlet {
         } catch (EmptyResultDataAccessException e){
             response.sendError(404);
         }
+    }
+
+    private void setCommentsChildren(Comment comment){
+        try {
+            CommentService commentService = new CommentService();
+            List<Comment> commentFirstChildren = commentService.findCommentFirstChildrenList(comment.getCommentId());
+            comment.setFirstChildrenList(commentFirstChildren);
+            for (Comment commentFirstChild : commentFirstChildren) {
+                setCommentsChildren(commentFirstChild);
+            }
+        }catch (EmptyResultDataAccessException e){
+
+        }
+
     }
 
 

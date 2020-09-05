@@ -25,7 +25,7 @@ public class CommentService {
     }
 
     public void createComment(Post post, User user, String message){
-        Comment comment = initializeComment(post,user,message);
+        Comment comment = initializeComment(post,user,message, -1);
         DAOFactory factory = DAOFactory.getDAOFactory();
         CommentDAO commentDAO = factory.getCommentDAO();
         commentDAO.create(comment);
@@ -56,8 +56,14 @@ public class CommentService {
         return commentDAO.deleteAllPostComment(postId);
     }
 
+    public List<Comment> findCommentFirstChildrenList(int parentId){
+        DAOFactory factory =DAOFactory.getDAOFactory();
+        CommentDAO commentDAO = factory.getCommentDAO();
+        return commentDAO.findCommentFirstChildrenList(parentId);
+    }
 
-    private Comment initializeComment(Post post, User user, String message){
+
+    private Comment initializeComment(Post post, User user, String message, int parent_id){
         Comment comment = new Comment();
         comment.setDate(new Timestamp(new Date().getTime()));
         comment.setMessage(message);
@@ -65,6 +71,7 @@ public class CommentService {
         comment.setNegativeVote(0);
         comment.setPostId(post.getPostId());
         comment.setUserId(user.getUserId());
+        comment.setParentId(parent_id);
         return comment;
     }
 }

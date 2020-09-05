@@ -10,5 +10,7 @@ public interface CommentDAO extends GenericDAO<Comment, Integer> {
 
     List<Comment> readUserAllComments(int userId);
 
+    List<Comment> findCommentFirstChildrenList(int parentId);
+
     boolean deleteAllPostComment(int postId);
 }

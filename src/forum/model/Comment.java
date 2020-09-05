@@ -1,6 +1,7 @@
 package forum.model;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 
 public class Comment {
@@ -11,7 +12,9 @@ public class Comment {
     private String message;
     private int positiveVote;
     private int negativeVote;
+    private int parentId; // -1 if it is first comment
     private String author;
+    private List<Comment> firstChildrenList;
 
     public Comment() {
     }
@@ -24,9 +27,50 @@ public class Comment {
         this.message = comment.getMessage();
         this.positiveVote = comment.getPositiveVote();
         this.negativeVote = comment.getNegativeVote();
-        this.author = comment.author;
+        this.author = comment.getAuthor();
+        this.firstChildrenList = comment.getFirstChildrenList();
+        this.parentId = comment.getParentId();
     }
 
+
+    public int getParentId() {
+
+        return parentId;
+    }
+
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
+    }
+
+    public List<Comment> getFirstChildrenList() {
+        return firstChildrenList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment comment = (Comment) o;
+        return commentId == comment.commentId &&
+                postId == comment.postId &&
+                userId == comment.userId &&
+                positiveVote == comment.positiveVote &&
+                negativeVote == comment.negativeVote &&
+                parentId == comment.parentId &&
+                Objects.equals(date, comment.date) &&
+                Objects.equals(message, comment.message) &&
+                Objects.equals(author, comment.author) &&
+                Objects.equals(firstChildrenList, comment.firstChildrenList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(commentId, postId, userId, date, message, positiveVote, negativeVote, parentId, author, firstChildrenList);
+    }
+
+    public void setFirstChildrenList(List<Comment> firstChildrenList) {
+        this.firstChildrenList = firstChildrenList;
+    }
 
     public int getCommentId() {
         return commentId;
@@ -95,27 +139,8 @@ public class Comment {
 
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Comment comment = (Comment) o;
-        return commentId == comment.commentId &&
-                postId == comment.postId &&
-                userId == comment.userId &&
-                positiveVote == comment.positiveVote &&
-                negativeVote == comment.negativeVote &&
-                Objects.equals(date, comment.date) &&
-                Objects.equals(message, comment.message) &&
-                Objects.equals(author, comment.author);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(commentId, postId, userId, date, message, positiveVote, negativeVote, author);
-    }
-
-    @Override
-    public String toString() {
+    public String
+    toString() {
         return "Comment{" +
                 "commentId=" + commentId +
                 ", postId=" + postId +
@@ -124,8 +149,9 @@ public class Comment {
                 ", message='" + message + '\'' +
                 ", positiveVote=" + positiveVote +
                 ", negativeVote=" + negativeVote +
+                ", parentId=" + parentId +
                 ", author='" + author + '\'' +
+                ", firstChildrenList=" + firstChildrenList +
                 '}';
     }
-
 }

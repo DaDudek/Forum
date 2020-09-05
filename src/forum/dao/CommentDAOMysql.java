@@ -18,16 +18,22 @@ import java.util.Map;
 public class CommentDAOMysql  implements CommentDAO{
 
     private final static String CREATE =
-            "INSERT INTO comment(post_id, user_id, date, message, positive_vote, negative_vote) " +
-                    "VALUES(:post_id, :user_id, :date, :message, :positive_vote, :negative_vote) ";
+            "INSERT INTO comment(post_id, user_id, date, message, positive_vote, negative_vote, parent_id) " +
+                    "VALUES(:post_id, :user_id, :date, :message, :positive_vote, :negative_vote, :parent_id) ";
+
+
+    private final static String READ_COMMENT_FIRST_CHILDREN =
+            "SELECT comment_id, post_id, comment.user_id, date, message, positive_vote, negative_vote, parent_id, username " +
+                    "FROM comment INNER JOIN user ON comment.user_id = user.user_id " +
+                    " WHERE parent_id = :parent_id ORDER BY date DESC";
 
     private final static String READ_POST_ALL_COMMENTS =
-            "SELECT comment_id, post_id, comment.user_id, date, message, positive_vote, negative_vote, username " +
+            "SELECT comment_id, post_id, comment.user_id, date, message, positive_vote, parent_id, negative_vote,  username " +
                     "FROM comment INNER JOIN user ON comment.user_id = user.user_id " +
-                    " WHERE post_id = :post_id ORDER BY date DESC";
+                    " WHERE post_id = :post_id AND parent_id < 0 ORDER BY date DESC";
 
     private final static String READ_USER_ALL_COMMENTS =
-            "SELECT comment_id, post_id, comment.user_id, date, message, positive_vote, negative_vote, username " +
+            "SELECT comment_id, post_id, comment.user_id, date, message, positive_vote, negative_vote, parent_id, username " +
                     "FROM comment INNER JOIN user ON comment.user_id = user.user_id " +
                     " WHERE comment.user_id = :user_id ORDER BY date DESC";
 
@@ -36,7 +42,7 @@ public class CommentDAOMysql  implements CommentDAO{
     private static final String DELETE_ALL_POST_COMMENTS = "DELETE FROM comment WHERE post_id = :post_id";
 
     private static final String READ =
-            "SELECT comment_id, post_id, comment.user_id, date, message, positive_vote, negative_vote, username " +
+            "SELECT comment_id, post_id, comment.user_id, date, message, positive_vote, negative_vote, parent_id, username " +
                     "FROM comment INNER JOIN user ON comment.user_id = user.user_id " +
                     "WHERE comment_id = :comment_id ";
 
@@ -95,6 +101,7 @@ public class CommentDAOMysql  implements CommentDAO{
         map.put("negative_vote", comment.getNegativeVote());
         map.put("post_id", comment.getPostId());
         map.put("comment_id",comment.getCommentId());
+        map.put("parent_id",comment.getParentId());
         return map;
     }
 
@@ -112,6 +119,14 @@ public class CommentDAOMysql  implements CommentDAO{
         map.put("user_id",userId);
         SqlParameterSource parameterSource = new MapSqlParameterSource(map);
         return template.query(READ_USER_ALL_COMMENTS,parameterSource,new CommentRowMapper());
+    }
+
+    @Override
+    public List<Comment> findCommentFirstChildrenList(int parentId) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("parent_id", parentId);
+        SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
+        return template.query(READ_COMMENT_FIRST_CHILDREN, parameterSource, new CommentRowMapper());
     }
 
     @Override
@@ -135,6 +150,7 @@ public class CommentDAOMysql  implements CommentDAO{
             comment.setCommentId(resultSet.getInt("comment_id"));
             comment.setDate(resultSet.getTimestamp("date"));
             comment.setAuthor(resultSet.getString("username"));
+            comment.setParentId(resultSet.getInt("parent_id"));
             return comment;
         }
     }
