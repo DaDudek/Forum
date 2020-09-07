@@ -27,10 +27,15 @@ public class CommentDAOMysql  implements CommentDAO{
                     "FROM comment INNER JOIN user ON comment.user_id = user.user_id " +
                     " WHERE parent_id = :parent_id ORDER BY date DESC";
 
-    private final static String READ_POST_ALL_COMMENTS =
+    private final static String READ_POST_ALL_ROOT_COMMENTS =
             "SELECT comment_id, post_id, comment.user_id, date, message, positive_vote, parent_id, negative_vote,  username " +
                     "FROM comment INNER JOIN user ON comment.user_id = user.user_id " +
                     " WHERE post_id = :post_id AND parent_id < 0 ORDER BY date DESC";
+
+    private final static String READ_POST_ALL_COMMENTS =
+            "SELECT comment_id, post_id, comment.user_id, date, message, positive_vote, parent_id, negative_vote,  username " +
+                    "FROM comment INNER JOIN user ON comment.user_id = user.user_id " +
+                    " WHERE post_id = :post_id ORDER BY date DESC";
 
     private final static String READ_USER_ALL_COMMENTS =
             "SELECT comment_id, post_id, comment.user_id, date, message, positive_vote, negative_vote, parent_id, username " +
@@ -106,12 +111,21 @@ public class CommentDAOMysql  implements CommentDAO{
     }
 
     @Override
-    public List<Comment> readAllPostComment(int post_id) {
+    public List<Comment> readAllPostComments(int postId) {
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("post_id",post_id);
+        paramMap.put("post_id",postId);
         SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
         return template.query(READ_POST_ALL_COMMENTS,parameterSource,new CommentRowMapper());
     }
+
+    @Override
+    public List<Comment> readAllPostRootComments(int postId) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("post_id",postId);
+        SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
+        return template.query(READ_POST_ALL_ROOT_COMMENTS,parameterSource,new CommentRowMapper());
+    }
+
 
     @Override
     public List<Comment> readUserAllComments(int userId) {

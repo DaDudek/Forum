@@ -29,7 +29,7 @@ public class VoteController extends HttpServlet {
             boolean isPositive = Boolean.parseBoolean(request.getParameter("is_positive"));
             updateVote(postId, userId, isPositive);
             if (request.getParameter("post-page") != null) {
-                responseAdress = request.getContextPath() + "/post?post-id=" + postId;
+                responseAdress = request.getContextPath() + "/post?post-id=" + postId+"&page="+request.getParameter("page");
             } else {
                 responseAdress = request.getContextPath() + "/";
             }

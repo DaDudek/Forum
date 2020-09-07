@@ -32,10 +32,16 @@ public class CommentService {
 
     }
 
-    public List<Comment> readPostAllComment(int post_id){
+    public List<Comment> readPostAllRootComments(int post_id){
         DAOFactory factory = DAOFactory.getDAOFactory();
         CommentDAO commentDAO = factory.getCommentDAO();
-        return commentDAO.readAllPostComment(post_id);
+        return commentDAO.readAllPostRootComments(post_id);
+    }
+
+    public List<Comment> readPostAllComments(int post_id){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        CommentDAO commentDAO = factory.getCommentDAO();
+        return commentDAO.readAllPostComments(post_id);
     }
 
     public List<Comment> readUserAllComment(int userId){

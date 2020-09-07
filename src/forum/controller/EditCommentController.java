@@ -1,5 +1,7 @@
 package forum.controller;
 
+import forum.logic.CommentResponseHandler;
+import forum.logic.PaginationHandler;
 import forum.model.Comment;
 import forum.model.Post;
 import forum.model.User;
@@ -13,8 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 @WebServlet("/edit-comment")
@@ -26,7 +26,7 @@ public class EditCommentController extends HttpServlet {
         int commentId = Integer.parseInt(request.getParameter("comment-id"));
         updateComment(user,message,postId,commentId);
         request.removeAttribute("commentEditingId");
-        response.sendRedirect(request.getContextPath()+"/post?post-id="+request.getParameter("post-id"));
+        response.sendRedirect(request.getContextPath()+"/post?post-id="+request.getParameter("post-id")+"&page="+request.getParameter("page"));
 
 
     }
@@ -39,22 +39,36 @@ public class EditCommentController extends HttpServlet {
             PostService postService = new PostService();
             CommentService commentService = new CommentService();
             User user = (User) request.getSession().getAttribute("user");
+            PaginationHandler<Comment> paginationHandler = new PaginationHandler<>();
+            CommentResponseHandler commentResponseHandler = new CommentResponseHandler();
 
             Post post = postService.readPost(postId);
             Comment comment = commentService.readComment(commentId);
-            List<Comment> comments = commentService.readPostAllComment(postId);
+            List<Comment> comments = commentService.readPostAllRootComments(postId);
 
-            request.setAttribute("post", post);
-            request.setAttribute("comments", comments);
-            if (comment.getUserId() == user.getUserId()){
-                request.setAttribute("commentEditingId", commentId);
-                request.getRequestDispatcher("WEB-INF/post.jsp").forward(request, response);
+            int pageNumber = paginationHandler.initPageNumber(request.getParameter("page"));
+            List<Integer> pages = paginationHandler.setPagesList(comments);
+
+            if (pageNumber > pages.size() || pageNumber <= 0) {
+                response.sendError(404);
+            } else {
+                List<Comment> commentsInPage = paginationHandler.setPublicationOnPage(comments, pageNumber);
+                for (Comment commentChild : commentsInPage) {
+                    commentResponseHandler.setCommentsChildren(commentChild);
+                }
+                request.setAttribute("post", post);
+                request.setAttribute("comments", commentsInPage);
+                request.setAttribute("pageNumber", pageNumber);
+                request.setAttribute("lastPageNumber", pages.size());
+                request.setAttribute("pages", pages);
+                if (comment.getUserId() == user.getUserId()) {
+                    request.setAttribute("commentEditingId", commentId);
+                    request.getRequestDispatcher("WEB-INF/post.jsp").forward(request, response);
+                } else {
+                    response.sendError(403);
+                }
             }
-            else{
-                response.sendError(403);
-            }
-        }
-        catch (NumberFormatException | EmptyResultDataAccessException e){
+        } catch(NumberFormatException | EmptyResultDataAccessException e) {
             response.sendError(404);
         }
     }

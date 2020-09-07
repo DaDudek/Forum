@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PipedOutputStream;
 import java.util.List;
 
 @WebServlet("/delete-post")
@@ -54,7 +55,7 @@ public class DeletePostController extends HttpServlet {
         PostService postService = new PostService();
 
 
-        List<Comment> commentList = commentService.readPostAllComment(postId);
+        List<Comment> commentList = commentService.readPostAllComments(postId);
         for (int i = 0; i < commentList.size(); i++)
         {
             commentVoteService.deleteCommentAllVotes(commentList.get(i).getCommentId());

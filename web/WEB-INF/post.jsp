@@ -16,12 +16,13 @@
 
 <jsp:include page="fragments/navbar.jsp" />
 
+
     <div class="container">
         <div class="row bs-callout bs-callout-warning">
             <div class="col col-md-1 col-sm-2">
-                <a href="${pageContext.request.contextPath}/vote?post_id=${requestScope.post.postId}&is_positive=true&post-page=true" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
+                <a href="${pageContext.request.contextPath}/vote?post_id=${requestScope.post.postId}&is_positive=true&post-page=true&page=${requestScope.pageNumber}" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
                 <div class="well well-sm centered"><p style="text-align: center"><c:out value="${requestScope.post.positiveVote - requestScope.post.negativeVote}" /></div>
-                <a href="${pageContext.request.contextPath}/vote?post_id=${requestScope.post.postId}&is_positive=false&post-page=true" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
+                <a href="${pageContext.request.contextPath}/vote?post_id=${requestScope.post.postId}&is_positive=false&post-page=true&page=${requestScope.pageNumber}" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
             </div>
             <div class="col col-md-11 col-sm-10">
                 <h2 class="centered"><c:out value="${requestScope.post.title}" /></h2>
@@ -55,21 +56,23 @@
             </div>
         </div>
 
+
+
         <c:if test="${not empty requestScope.comments}">
             <c:forEach var="comment" items="${requestScope.comments}">
                 <c:set var="commentsResponse" value="${comment.firstChildrenList}" scope="request"/>
                 <div class="container">
                     <div class="row bs-callout bs-callout-warning">
                         <div class="col col-md-1 col-sm-2">
-                            <a href="${pageContext.request.contextPath}/comment-vote?post_id=${comment.postId}&is_positive=true&comment_id=${comment.commentId}&post-page=true" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
+                            <a href="${pageContext.request.contextPath}/comment-vote?post_id=${comment.postId}&is_positive=true&comment_id=${comment.commentId}&post-page=true&page=${requestScope.pageNumber}" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
                             <div class="well well-sm centered"><p style="text-align: center"><c:out value="${comment.positiveVote - comment.negativeVote}" /></div>
-                            <a href="${pageContext.request.contextPath}/comment-vote?post_id=${comment.postId}&is_positive=false&comment_id=${comment.commentId}&post-page=true" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
+                            <a href="${pageContext.request.contextPath}/comment-vote?post_id=${comment.postId}&is_positive=false&comment_id=${comment.commentId}&post-page=true&page=${requestScope.pageNumber}" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
                         </div>
                         <div class="col col-md-11 col-sm-10">
                             <h6><small style="color:#171716">Add by: <c:out value="${comment.author}" />  <fmt:formatDate value="${comment.date}" pattern="dd/MM/YYYY"/></small></h6>
                             <c:choose>
                                 <c:when test="${requestScope.commentEditingId == comment.commentId}">
-                                    <form class="form-signin" method="post" action="edit-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}">
+                                    <form class="form-signin" method="post" action="edit-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}&page=${requestScope.pageNumber}">
                                         <textarea name="inputMessage" rows="5" class="form-control"
                                                   placeholder="post comment - max 500 character" required autofocus>${comment.message}</textarea>
                                         <input class="btn btn-lg btn-success btn-block" type="submit"
@@ -83,11 +86,11 @@
                         </div>
 
                         <c:if test="${(comment.userId ==  sessionScope.user.userId) or sessionScope.user.role.name() eq 'ADMIN' }">
-                            <a href="${pageContext.request.contextPath}/delete-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}"><button class="btn btn-danger btn-xs">Delete comment</button></a>
+                            <a href="${pageContext.request.contextPath}/delete-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}&page=${requestScope.pageNumber}"><button class="btn btn-danger btn-xs">Delete comment</button></a>
                         </c:if>
                         <c:if test="${comment.userId ==  sessionScope.user.userId}">
                             <c:if test="${requestScope.isEditing == null}">
-                                <a href="${pageContext.request.contextPath}/edit-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}"><button class="btn btn-warning btn-xs">Edit comment</button></a>
+                                <a href="${pageContext.request.contextPath}/edit-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}&page=${requestScope.pageNumber}"><button class="btn btn-warning btn-xs">Edit comment</button></a>
                             </c:if>
                         </c:if>
                     </div>
@@ -110,6 +113,11 @@
 
     </div>
 
+
+
+
+
+
 <div class="text-center">
     <nav aria-label="...">
         <ul class="pagination">
@@ -125,7 +133,6 @@
                     </li>
                 </c:otherwise>
             </c:choose>
-
             <c:forEach var="page" items="${requestScope.pages}">
                 <c:choose>
                     <c:when test="${page == requestScope.pageNumber}">

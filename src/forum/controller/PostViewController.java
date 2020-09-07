@@ -1,11 +1,11 @@
 package forum.controller;
 
+import forum.logic.CommentResponseHandler;
 import forum.logic.PaginationHandler;
 import forum.model.Comment;
 import forum.model.Post;
 import forum.service.CommentService;
 import forum.service.PostService;
-import org.springframework.asm.SpringAsmInfo;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import javax.servlet.ServletException;
@@ -29,9 +29,10 @@ public class PostViewController extends HttpServlet {
             PostService postService = new PostService();
             CommentService commentService = new CommentService();
             PaginationHandler<Comment> paginationHandler = new PaginationHandler<>();
+            CommentResponseHandler commentResponseHandler = new CommentResponseHandler();
 
             Post post = postService.readPost(postId);
-            List<Comment> comments = commentService.readPostAllComment(postId);
+            List<Comment> comments = commentService.readPostAllRootComments(postId);
 
             int pageNumber = paginationHandler.initPageNumber(request.getParameter("page"));
             List<Integer> pages = paginationHandler.setPagesList(comments);
@@ -42,7 +43,7 @@ public class PostViewController extends HttpServlet {
             } else {
                 List<Comment> commentInPage = paginationHandler.setPublicationOnPage(comments, pageNumber);
                 for (Comment comment : commentInPage) {
-                    setCommentsChildren(comment);
+                    commentResponseHandler.setCommentsChildren(comment);
                 }
                 request.setAttribute("pageNumber", pageNumber);
                 request.setAttribute("lastPageNumber",pages.size());
@@ -57,19 +58,6 @@ public class PostViewController extends HttpServlet {
         }
     }
 
-    private void setCommentsChildren(Comment comment){
-        try {
-            CommentService commentService = new CommentService();
-            List<Comment> commentFirstChildren = commentService.findCommentFirstChildrenList(comment.getCommentId());
-            comment.setFirstChildrenList(commentFirstChildren);
-            for (Comment commentFirstChild : commentFirstChildren) {
-                setCommentsChildren(commentFirstChild);
-            }
-        }catch (EmptyResultDataAccessException e){
-
-        }
-
-    }
 
 
 }

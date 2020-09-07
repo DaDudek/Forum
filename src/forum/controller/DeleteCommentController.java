@@ -34,7 +34,7 @@ public class DeleteCommentController extends HttpServlet {
 
             if((comment.getUserId() == user.getUserId()) || (user.getRole().equals(Role.valueOf("ADMIN")))){
                 deleteComment(commentId);
-                response.sendRedirect(request.getContextPath()+"/post?post-id="+request.getParameter("post-id"));
+                response.sendRedirect(request.getContextPath()+"/post?post-id="+request.getParameter("post-id")+"&page="+request.getParameter("page"));
             }
             else {
                 response.sendError(403);
@@ -51,4 +51,5 @@ public class DeleteCommentController extends HttpServlet {
         commentVoteService.deleteCommentAllVotes(commentId);
         commentService.deleteComment(commentId);
     }
+
 }
