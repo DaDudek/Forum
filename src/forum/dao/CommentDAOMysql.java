@@ -21,11 +21,10 @@ public class CommentDAOMysql  implements CommentDAO{
             "INSERT INTO comment(post_id, user_id, date, message, positive_vote, negative_vote, parent_id) " +
                     "VALUES(:post_id, :user_id, :date, :message, :positive_vote, :negative_vote, :parent_id) ";
 
-
     private final static String READ_COMMENT_FIRST_CHILDREN =
             "SELECT comment_id, post_id, comment.user_id, date, message, positive_vote, negative_vote, parent_id, username " +
                     "FROM comment INNER JOIN user ON comment.user_id = user.user_id " +
-                    " WHERE parent_id = :parent_id ORDER BY date DESC";
+                    " WHERE parent_id = :parent_id ORDER BY date";
 
     private final static String READ_POST_ALL_ROOT_COMMENTS =
             "SELECT comment_id, post_id, comment.user_id, date, message, positive_vote, parent_id, negative_vote,  username " +
@@ -70,6 +69,7 @@ public class CommentDAOMysql  implements CommentDAO{
         return comment;
     }
 
+
     @Override
     public Comment read(Integer primaryKey){
         Map<String, Object> map = new HashMap<>();
@@ -95,20 +95,6 @@ public class CommentDAOMysql  implements CommentDAO{
 
     }
 
-
-
-    private Map<String, Object> mapComment(Comment comment){
-        Map<String, Object> map = new HashMap<>();
-        map.put("user_id", comment.getUserId());
-        map.put("message", comment.getMessage());
-        map.put("date", comment.getDate());
-        map.put("positive_vote", comment.getPositiveVote());
-        map.put("negative_vote", comment.getNegativeVote());
-        map.put("post_id", comment.getPostId());
-        map.put("comment_id",comment.getCommentId());
-        map.put("parent_id",comment.getParentId());
-        return map;
-    }
 
     @Override
     public List<Comment> readAllPostComments(int postId) {
@@ -149,6 +135,20 @@ public class CommentDAOMysql  implements CommentDAO{
         map.put("post_id", postId);
         SqlParameterSource parameterSource = new MapSqlParameterSource(map);
         return template.update(DELETE_ALL_POST_COMMENTS, parameterSource) > 0;
+    }
+
+
+    private Map<String, Object> mapComment(Comment comment){
+        Map<String, Object> map = new HashMap<>();
+        map.put("user_id", comment.getUserId());
+        map.put("message", comment.getMessage());
+        map.put("date", comment.getDate());
+        map.put("positive_vote", comment.getPositiveVote());
+        map.put("negative_vote", comment.getNegativeVote());
+        map.put("post_id", comment.getPostId());
+        map.put("comment_id",comment.getCommentId());
+        map.put("parent_id",comment.getParentId());
+        return map;
     }
 
     private class CommentRowMapper implements RowMapper<Comment>{

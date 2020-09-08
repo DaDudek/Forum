@@ -32,6 +32,14 @@ public class CommentService {
 
     }
 
+    public void createResponse(Post post, User user, String message, int parentId){
+        Comment comment = initializeComment(post,user,message, parentId);
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        CommentDAO commentDAO = factory.getCommentDAO();
+        commentDAO.create(comment);
+
+    }
+
     public List<Comment> readPostAllRootComments(int post_id){
         DAOFactory factory = DAOFactory.getDAOFactory();
         CommentDAO commentDAO = factory.getCommentDAO();

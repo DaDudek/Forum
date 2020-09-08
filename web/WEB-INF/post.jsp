@@ -93,8 +93,23 @@
                                 <a href="${pageContext.request.contextPath}/edit-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}&page=${requestScope.pageNumber}"><button class="btn btn-warning btn-xs">Edit comment</button></a>
                             </c:if>
                         </c:if>
+                        <c:if test="${not empty sessionScope.user}">
+                            <c:if test="${requestScope.isEditing == null}">
+                                <a href="${pageContext.request.contextPath}/response?post-id=${requestScope.post.postId}&parent-id=${comment.commentId}"><button class="btn btn-info btn-xs">Response to comment</button></a>
+                            </c:if>
+                        </c:if>
                     </div>
                     <jsp:include page="fragments/response.jsp" />
+                    <c:if test="${comment.commentId == requestScope.responseParentId}">
+                        <div class="row bs-callout bs-callout-warning">
+                            <form class="form-signin" method="post" action="response?post-id=${requestScope.post.postId}&parent-id=${comment.commentId}&page=${requestScope.pageNumber}">
+                                <textarea name="inputMessage" rows="5" class="form-control"
+                                          placeholder="post comment - max 500 character" required autofocus></textarea>
+                                <input class="btn btn-lg btn-success btn-block" type="submit"
+                                       value="add response" />
+                            </form>
+                        </div>
+                    </c:if>
                 </div>
             </c:forEach>
         </c:if>
