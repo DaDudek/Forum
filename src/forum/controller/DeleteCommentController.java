@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/delete-comment")
 public class DeleteCommentController extends HttpServlet {
@@ -33,7 +34,7 @@ public class DeleteCommentController extends HttpServlet {
             Comment comment = commentService.readComment(commentId);
 
             if((comment.getUserId() == user.getUserId()) || (user.getRole().equals(Role.valueOf("ADMIN")))){
-                deleteComment(commentId);
+                deleteComment(commentId, commentService, new CommentVoteService());
                 response.sendRedirect(request.getContextPath()+"/post?post-id="+request.getParameter("post-id")+"&page="+request.getParameter("page"));
             }
             else {
@@ -44,12 +45,14 @@ public class DeleteCommentController extends HttpServlet {
         }
 
     }
-    private void deleteComment(int commentId){
-        CommentVoteService commentVoteService = new CommentVoteService();
-        CommentService commentService = new CommentService();
-
+    private void deleteComment(int commentId, CommentService commentService, CommentVoteService commentVoteService){
+        List<Comment> firstChildren = commentService.findCommentFirstChildrenList(commentId);
+        for (Comment firstChild : firstChildren) {
+            deleteComment(firstChild.getCommentId(),commentService,commentVoteService);
+        }
         commentVoteService.deleteCommentAllVotes(commentId);
         commentService.deleteComment(commentId);
     }
+
 
 }
