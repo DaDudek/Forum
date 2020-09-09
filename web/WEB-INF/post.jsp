@@ -30,12 +30,12 @@
                 <c:choose>
                     <c:when test="${requestScope.isEditing != null}">
                         <form class="form-signin" method="post" action="edit-post?post-id=${requestScope.post.postId}">
-                            <input name="inputTitle" type="text" class="form-control" placeholder="post title max 60 character"
+                            <input name="inputTitle" type="text" class="form-control" placeholder="post title max 60 character (more will be cut)"
                                    value="${requestScope.post.title}" required autofocus />
                             <textarea name="inputDescription" rows="5" class="form-control"
-                                      placeholder="post description - max 100 character" required autofocus>${requestScope.post.description}</textarea>
+                                      placeholder="post description - max 100 character (more will be cut)" required autofocus>${requestScope.post.description}</textarea>
                             <textarea name="inputMessage" rows="5" class="form-control"
-                                       placeholder="post message - max 500 character" required autofocus>${requestScope.post.message}</textarea>
+                                       placeholder="post message - max 500 character (more will be cut)" required autofocus>${requestScope.post.message}</textarea>
                             <input class="btn btn-lg btn-success btn-block" type="submit"
                                    value="save changes" />
                         </form>
@@ -74,7 +74,7 @@
                                 <c:when test="${requestScope.commentEditingId == comment.commentId}">
                                     <form class="form-signin" method="post" action="edit-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}&page=${requestScope.pageNumber}">
                                         <textarea name="inputMessage" rows="5" class="form-control"
-                                                  placeholder="post comment - max 500 character" required autofocus>${comment.message}</textarea>
+                                                  placeholder="post comment - max 500 character (more will be cut)" required autofocus>${comment.message}</textarea>
                                         <input class="btn btn-lg btn-success btn-block" type="submit"
                                                value="save comment changes" />
                                     </form>
@@ -104,7 +104,7 @@
                         <div class="row bs-callout bs-callout-warning">
                             <form class="form-signin" method="post" action="response?post-id=${requestScope.post.postId}&parent-id=${comment.commentId}&page=${requestScope.pageNumber}">
                                 <textarea name="inputMessage" rows="5" class="form-control"
-                                          placeholder="post comment - max 500 character" required autofocus></textarea>
+                                          placeholder="post comment - max 500 character (more will be cut)" required autofocus></textarea>
                                 <input class="btn btn-lg btn-success btn-block" type="submit"
                                        value="add response" />
                             </form>
@@ -119,7 +119,7 @@
             <div class="row bs-callout bs-callout-warning">
                 <form class="form-signin" method="post" action="add-comment?post-id=${requestScope.post.postId}">
                     <textarea name="inputMessage" rows="5" class="form-control"
-                              placeholder="post comment - max 500 character" required autofocus></textarea>
+                              placeholder="post comment - max 500 character (more will be cut)" required autofocus></textarea>
                     <input class="btn btn-lg btn-success btn-block" type="submit"
                            value="add comment" />
                 </form>
