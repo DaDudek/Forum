@@ -19,12 +19,12 @@
     <div class="col-md-8 col-md-offset-2">
         <form class="form-signin" method="post" action="new-post">
             <h2 class="form-signin-heading">Add new post</h2>
-            <input name="inputTitle" type="text" class="form-control" placeholder="post title max 60 character"
+            <input name="inputTitle" type="text" class="form-control" placeholder="post title max 60 character (more will be cut)"
                    required autofocus />
             <textarea name="inputDescription" rows="5" class="form-control"
-                      placeholder="post description - max 100 character" required autofocus></textarea>
+                      placeholder="post description - max 100 character (more will be cut)" required autofocus></textarea>
             <textarea name="inputMessage" rows="5" class="form-control"
-                      placeholder="post message - max 500 character" required autofocus></textarea>
+                      placeholder="post message - max 500 character (more will be cut)" required autofocus></textarea>
             <input class="btn btn-lg btn-primary btn-block" type="submit"
                    value="add" />
         </form>
