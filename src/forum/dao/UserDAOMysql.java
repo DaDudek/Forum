@@ -3,6 +3,8 @@ package forum.dao;
 import forum.model.Role;
 import forum.model.User;
 import forum.util.ConnectionProvider;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -24,6 +26,10 @@ public class UserDAOMysql implements UserDAO {
             "SELECT user_id, user.username, email, password, account_active, role_name FROM user INNER JOIN user_role ON user.username = user_role.username WHERE user_id = :userId";
     private static final String READ_BY_USERNAME =
             "SELECT user_id, user.username, email, password, account_active, role_name FROM user INNER JOIN user_role ON user.username = user_role.username WHERE user.username = :username";
+    private static final String CHECK_USERNAME =
+            "SELECT username FROM user WHERE username = :username";
+    private static final String CHECK_EMAIL =
+            "SELECT email FROM user WHERE email = :email";
 
 
 
@@ -63,6 +69,32 @@ public class UserDAOMysql implements UserDAO {
     public User readByUsername(String username){
         SqlParameterSource parameterSource = new MapSqlParameterSource("username", username);
         return template.queryForObject(READ_BY_USERNAME,parameterSource,new UserRowMapper());
+    }
+
+    @Override
+    public boolean checkUsername(String username) {
+        SqlParameterSource parameterSource = new MapSqlParameterSource("username", username);
+        try {
+            template.queryForObject(CHECK_USERNAME, parameterSource, new UserRowMapper());
+            return false;
+        } catch (EmptyResultDataAccessException e) {
+            return true;
+        } catch (UncategorizedSQLException e){
+            return false;
+        }
+    }
+
+    @Override
+    public boolean checkEmail(String email) {
+        SqlParameterSource parameterSource = new MapSqlParameterSource("email", email);
+        try {
+            template.queryForObject(CHECK_EMAIL, parameterSource, new UserRowMapper());
+            return false;
+        } catch (EmptyResultDataAccessException e) {
+            return true;
+        }catch (UncategorizedSQLException e){
+            return false;
+        }
     }
 
     private void setRole(User user){

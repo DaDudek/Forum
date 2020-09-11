@@ -17,6 +17,19 @@ public class UserService {
         userDAO.create(user);
     }
 
+    public boolean checkUsername(String username){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        UserDAO userDAO = factory.getUserDAO();
+        return userDAO.checkUsername(username);
+    }
+
+    public boolean checkEmail(String email){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        UserDAO userDAO = factory.getUserDAO();
+        return userDAO.checkEmail(email);
+    }
+
+
     public User readUserByUsername(String username){
         DAOFactory factory = DAOFactory.getDAOFactory();
         UserDAO userDAO = factory.getUserDAO();

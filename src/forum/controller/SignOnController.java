@@ -19,11 +19,37 @@ public class SignOnController extends HttpServlet {
         String username = inputLengthHandler.checkLengthAndReturnValue(request.getParameter("inputUsername"),InputLengthHandler.USERNAME_SIZE);
         String password = request.getParameter("inputPassword");
         String email = request.getParameter("inputEmail");
-        userService.createUser(username, email, password);
-        response.sendRedirect(request.getContextPath()+ "/" + (String) request.getSession().getAttribute("url"));
+        setRequestAttribute(username,email,request);
+        if (userService.checkUsername(username) && userService.checkEmail(email)){
+            userService.createUser(username, email, password);
+            response.sendRedirect(request.getContextPath()+ "/" + (String) request.getSession().getAttribute("url"));
+        }
+        else {
+            request.getRequestDispatcher("/WEB-INF/signon.jsp").forward(request,response);
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.setAttribute("username", "Username (max 60 character - more will be cut)");
+        request.setAttribute("email", "Email");
         request.getRequestDispatcher("/WEB-INF/signon.jsp").forward(request,response);
+    }
+
+    private void setRequestAttribute(String username, String email, HttpServletRequest request){
+        UserService userService = new UserService();
+        if (userService.checkUsername(username)){
+            request.setAttribute("username", "Username (max 60 character - more will be cut)");
+        }
+        else {
+            request.setAttribute("username", "This username is already used");
+        }
+        if (userService.checkEmail(email)){
+            request.setAttribute("email", "Email");
+        }
+        else {
+            request.setAttribute("email", "This email is already used");
+        }
+
     }
 }
