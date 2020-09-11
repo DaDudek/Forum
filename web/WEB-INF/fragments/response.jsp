@@ -16,7 +16,7 @@
                     <a href="${pageContext.request.contextPath}/comment-vote?post_id=${comment.postId}&is_positive=false&comment_id=${comment.commentId}&post-page=true&page=${requestScope.pageNumber}"" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
                 </div>
                 <div class="col col-md-11 col-sm-10">
-                    <h6><small style="color:#171716">Add by: <c:out value="${comment.author}" />  <fmt:formatDate value="${comment.date}" pattern="dd/MM/YYYY"/></small></h6>
+                    <h6><small style="color:#171716">Add by: <c:out value="${comment.author}" />  date: <fmt:formatDate value="${comment.date}" pattern="dd/MM/YYYY"/></small></h6>
                     <c:choose>
                         <c:when test="${requestScope.commentEditingId == comment.commentId}">
                             <form class="form-signin" method="post" action="edit-comment?comment-id=${comment.commentId}&post-id=${requestScope.post.postId}&page=${requestScope.pageNumber}">

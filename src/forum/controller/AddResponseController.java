@@ -1,6 +1,7 @@
 package forum.controller;
 
 import forum.logic.CommentResponseHandler;
+import forum.logic.InputLengthHandler;
 import forum.logic.PaginationHandler;
 import forum.model.Comment;
 import forum.model.Post;
@@ -23,9 +24,12 @@ public class AddResponseController extends HttpServlet {
 
         CommentService commentService = new CommentService();
         PostService postService = new PostService();
+        InputLengthHandler inputLengthHandler = new InputLengthHandler();
         User user =(User) request.getSession().getAttribute("user");
         Post post = postService.readPost(Integer.parseInt(request.getParameter("post-id")));
-        commentService.createResponse(post, user, request.getParameter("inputMessage"),Integer.parseInt(request.getParameter("parent-id")));
+        commentService.createResponse(post, user,
+                inputLengthHandler.checkLengthAndReturnValue(request.getParameter("inputMessage"),InputLengthHandler.MESSAGE_SIZE),
+                Integer.parseInt(request.getParameter("parent-id")));
         request.removeAttribute("responseParentId");
 
         response.sendRedirect(request.getContextPath() + "/post?post-id="+request.getParameter("post-id")+"&page="+request.getParameter("page"));

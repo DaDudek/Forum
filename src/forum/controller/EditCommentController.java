@@ -1,6 +1,7 @@
 package forum.controller;
 
 import forum.logic.CommentResponseHandler;
+import forum.logic.InputLengthHandler;
 import forum.logic.PaginationHandler;
 import forum.model.Comment;
 import forum.model.Post;
@@ -75,12 +76,13 @@ public class EditCommentController extends HttpServlet {
 
     private void updateComment(User user, String message, int postId, int commentId){
         CommentService commentService = new CommentService();
+        InputLengthHandler lengthHandler = new InputLengthHandler();
         Comment comment = commentService.readComment(commentId);
         Comment updatedComment = new Comment();
         updatedComment.setAuthor(user.getUsername());
         updatedComment.setDate(comment.getDate());
         updatedComment.setCommentId(commentId);
-        updatedComment.setMessage(message);
+        updatedComment.setMessage(lengthHandler.checkLengthAndReturnValue(message, InputLengthHandler.MESSAGE_SIZE));
         updatedComment.setPositiveVote(comment.getPositiveVote());
         updatedComment.setNegativeVote(comment.getNegativeVote());
         updatedComment.setPostId(postId);

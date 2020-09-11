@@ -1,5 +1,6 @@
 package forum.controller;
 
+import forum.logic.InputLengthHandler;
 import forum.service.UserService;
 
 import javax.servlet.ServletException;
@@ -13,8 +14,9 @@ import java.io.IOException;
 public class SignOnController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        InputLengthHandler inputLengthHandler = new InputLengthHandler();
         UserService userService = new UserService();
-        String username = request.getParameter("inputUsername");
+        String username = inputLengthHandler.checkLengthAndReturnValue(request.getParameter("inputUsername"),InputLengthHandler.USERNAME_SIZE);
         String password = request.getParameter("inputPassword");
         String email = request.getParameter("inputEmail");
         userService.createUser(username, email, password);

@@ -1,5 +1,6 @@
 package forum.controller;
 
+import forum.logic.InputLengthHandler;
 import forum.model.User;
 import forum.service.PostService;
 
@@ -13,11 +14,11 @@ import java.io.IOException;
 @WebServlet("/new-post")
 public class PostAddController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        InputLengthHandler inputLengthHandler = new InputLengthHandler();
         request.setCharacterEncoding("UTF-8");
-        String title = request.getParameter("inputTitle");
-        String description = request.getParameter("inputDescription");
-        String message = request.getParameter("inputMessage");
+        String title = inputLengthHandler.checkLengthAndReturnValue(request.getParameter("inputTitle"), InputLengthHandler.TITLE_SIZE);
+        String description = inputLengthHandler.checkLengthAndReturnValue(request.getParameter("inputDescription"), InputLengthHandler.DESCRIPTION_SIZE);
+        String message = inputLengthHandler.checkLengthAndReturnValue(request.getParameter("inputMessage"), InputLengthHandler.MESSAGE_SIZE);
         User user = (User) request.getSession().getAttribute("user");
         PostService postService = new PostService();
         postService.createPost(title,description,message,user);
