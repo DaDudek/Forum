@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <security-constraint>
+        <display-name>Login required</display-name>
+
+        <web-resource-collection>
+            <web-resource-name>Auth</web-resource-name>
+            <description>Resources that can be accessed after login</description>
+            <url-pattern>/new-post</url-pattern>
+            <url-pattern>/sign-in</url-pattern>
+            <url-pattern>/vote</url-pattern>
+            <url-pattern>/history</url-pattern>
+            <url-pattern>/delete-post</url-pattern>
+            <url-pattern>/comment-vote</url-pattern>
+            <url-pattern>/delete-comment</url-pattern>
+            <url-pattern>/edit-comment</url-pattern>
+            <url-pattern>/edit-post</url-pattern>
+            <url-pattern>/add-comment</url-pattern>
+            <url-pattern>/sign-out</url-pattern>
+            <url-pattern>/response</url-pattern>
+
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+
+        <auth-constraint>
+            <role-name>user</role-name>
+            <role-name>admin</role-name>
+        </auth-constraint>
+
+    </security-constraint>
+
+    <security-role>
+        <role-name>user</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>admin</role-name>
+    </security-role>
+
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <form-login-config>
+            <form-login-page>/WEB-INF/signin.jsp</form-login-page>
+            <form-error-page>/WEB-INF/signin.jsp</form-error-page>
+        </form-login-config>
+    </login-config>
+</web-app>

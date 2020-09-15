@@ -1,6 +1,6 @@
 .idea/
-out/
+targes/
 *.iml
 *.bak
 *mwb
-web/META-INF/context.xml
+src/main/webapp/META-INF/context.xml
