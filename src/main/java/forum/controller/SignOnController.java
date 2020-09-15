@@ -18,7 +18,6 @@ public class SignOnController extends HttpServlet {
         UserService userService = new UserService();
         String username = inputLengthHandler.checkLengthAndReturnValue(request.getParameter("inputUsername"),InputLengthHandler.USERNAME_SIZE);
         String password = request.getParameter("inputPassword");
-        System.out.println(password);
         String email = request.getParameter("inputEmail");
         setRequestAttribute(username,email,request);
         if (userService.checkUsername(username) && userService.checkEmail(email)){

@@ -95,7 +95,7 @@
                         </c:if>
                         <c:if test="${not empty sessionScope.user}">
                             <c:if test="${requestScope.isEditing == null}">
-                                <a href="${pageContext.request.contextPath}/response?post-id=${requestScope.post.postId}&parent-id=${comment.commentId}"><button class="btn btn-info btn-xs">Response to comment</button></a>
+                                <a href="${pageContext.request.contextPath}/response?post-id=${requestScope.post.postId}&parent-id=${comment.commentId}&page=${requestScope.pageNumber}"><button class="btn btn-info btn-xs">Response to comment</button></a>
                             </c:if>
                         </c:if>
                     </div>
