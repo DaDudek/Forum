@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
+    <Valve
+            className="org.apache.catalina.authenticator.FormAuthenticator"
+            disableProxyCaching="false"
+            characterEncoding="UTF-8" />
     <Resource
             name="jdbc/forum"
             auth="Container"
@@ -23,7 +27,7 @@
             roleNameCol="role_name"
             localDataSource="true">
         <CredentialHandler className="org.apache.catalina.realm.MessageDigestCredentialHandler"
-                           algorithm="sha-256"
+                           algorithm="sha-256" encoding="UTF-8"
         />
     </Realm>
 </Context>

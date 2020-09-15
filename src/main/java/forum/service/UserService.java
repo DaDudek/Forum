@@ -5,6 +5,7 @@ import forum.dao.UserDAO;
 import forum.model.User;
 
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -53,7 +54,7 @@ public class UserService {
         } catch (NoSuchAlgorithmException e){
             e.printStackTrace();
         }
-        digest.update(password.getBytes());
+        digest.update(password.getBytes(StandardCharsets.UTF_8));
         String md5Passwrod = new BigInteger(1, digest.digest()).toString(16);
         return md5Passwrod;
     }
