@@ -31,7 +31,11 @@ public class VoteController extends HttpServlet {
             if (request.getParameter("post-page") != null) {
                 responseAdress = request.getContextPath() + "/post?post-id=" + postId+"&page="+request.getParameter("page");
             } else {
-                responseAdress = request.getContextPath() + "/?page="+request.getParameter("page");
+                if (request.getParameter("page") == null) {
+                    responseAdress = request.getContextPath() + "/";
+                } else {
+                    responseAdress = request.getContextPath() + "/?page=" + request.getParameter("page");
+                }
             }
             response.sendRedirect(responseAdress);
         } catch (EmptyResultDataAccessException | NumberFormatException e){

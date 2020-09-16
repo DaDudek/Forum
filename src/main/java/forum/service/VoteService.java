@@ -25,6 +25,13 @@ public class VoteService {
         VoteDAO voteDAO = factory.getVoteDAO();
         return voteDAO.getVoteByIds(postId,userId);
     }
+
+    public String getUserPostVoteType(int postId, int userId){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        VoteDAO voteDAO = factory.getVoteDAO();
+        return voteDAO.getUserPostVoteType(postId,userId);
+    }
+
     public boolean deletePostAllVotes(int postId){
         DAOFactory factory = DAOFactory.getDAOFactory();
         VoteDAO voteDAO = factory.getVoteDAO();

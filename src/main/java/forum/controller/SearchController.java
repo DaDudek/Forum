@@ -1,5 +1,6 @@
 package forum.controller;
 
+import forum.logic.ColorVoteButtonHandler;
 import forum.logic.PaginationHandler;
 import forum.model.Post;
 import forum.model.PostSort;
@@ -11,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/search")
@@ -45,6 +45,8 @@ public class SearchController extends HttpServlet {
                     response.sendError(404);
                 } else {
                     List<Post> postsOnPage = paginationHandler.setPublicationOnPage(posts,pageNumber);
+                    ColorVoteButtonHandler<Post> colorVoteButtonHandler = new ColorVoteButtonHandler<>();
+                    colorVoteButtonHandler.initPublicationVoteStatus(request, postsOnPage);
                     request.setAttribute("posts", postsOnPage);
                     request.setAttribute("postSort",postSort);
                     request.setAttribute("keywords",keywords);

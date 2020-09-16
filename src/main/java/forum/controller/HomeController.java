@@ -1,5 +1,6 @@
 package forum.controller;
 
+import forum.logic.ColorVoteButtonHandler;
 import forum.logic.PaginationHandler;
 import forum.model.Post;
 import forum.service.PostService;
@@ -10,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("")
@@ -32,6 +32,8 @@ public class HomeController extends HttpServlet {
                 response.sendError(404);
             } else{
                 List<Post> postOnPage = paginationHandler.setPublicationOnPage(posts,pageNumber);
+                ColorVoteButtonHandler<Post> colorVoteButtonHandler = new ColorVoteButtonHandler<>();
+                colorVoteButtonHandler.initPublicationVoteStatus(request, postOnPage);
 
                 request.setAttribute("pageNumber", pageNumber);
                 request.setAttribute("lastPageNumber", pages.size());
@@ -44,4 +46,6 @@ public class HomeController extends HttpServlet {
             response.sendError(404);
         }
     }
+
+
 }

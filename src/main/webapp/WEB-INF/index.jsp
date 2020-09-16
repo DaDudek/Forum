@@ -21,9 +21,23 @@
 <div class="container">
   <div class="row bs-callout bs-callout-warning">
     <div class="col col-md-1 col-sm-2">
-      <a href="${pageContext.request.contextPath}/vote?post_id=${post.postId}&is_positive=true&page=${requestScope.pageNumber}" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
+      <c:choose>
+          <c:when test="${post.postVoteType eq 'POSITIVE'}">
+              <a href="${pageContext.request.contextPath}/vote?post_id=${post.postId}&is_positive=true&page=${requestScope.pageNumber}" class="btn btn-block btn-primary my-bt-vote-up"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
+          </c:when>
+          <c:otherwise>
+              <a href="${pageContext.request.contextPath}/vote?post_id=${post.postId}&is_positive=true&page=${requestScope.pageNumber}" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
+          </c:otherwise>
+      </c:choose>
       <div class="well well-sm centered"><p style="text-align: center"><c:out value="${post.positiveVote - post.negativeVote}" /></div>
-      <a href="${pageContext.request.contextPath}/vote?post_id=${post.postId}&is_positive=false&page=${requestScope.pageNumber}" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
+        <c:choose>
+            <c:when test="${post.postVoteType eq 'NEGATIVE'}">
+                <a href="${pageContext.request.contextPath}/vote?post_id=${post.postId}&is_positive=false&page=${requestScope.pageNumber}" class="btn btn-block btn-primary my-bt-vote-down"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
+            </c:when>
+            <c:otherwise>
+                <a href="${pageContext.request.contextPath}/vote?post_id=${post.postId}&is_positive=false&page=${requestScope.pageNumber}" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
+            </c:otherwise>
+        </c:choose>
     </div>
     <div class="col col-md-11 col-sm-10">
       <h2 class="centered"><a href="${pageContext.request.contextPath}/post?post-id=${post.postId}"><c:out value="${post.title}" /></a></h2>

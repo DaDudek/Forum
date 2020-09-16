@@ -58,7 +58,7 @@ public class AddResponseController extends HttpServlet {
             } else {
                 List<Comment> commentsInPage = paginationHandler.setPublicationOnPage(comments, pageNumber);
                 for (Comment commentChild : commentsInPage) {
-                    commentResponseHandler.setCommentsChildren(commentChild);
+                    commentResponseHandler.setCommentsChildren(request,commentChild);
                 }
                 request.setAttribute("responseParentId",Integer.parseInt(request.getParameter("parent-id")));
                 request.setAttribute("post", post);

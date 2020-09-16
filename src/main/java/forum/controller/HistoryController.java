@@ -1,11 +1,11 @@
 package forum.controller;
 
+import forum.logic.ColorVoteButtonHandler;
 import forum.model.Comment;
 import forum.model.Post;
 import forum.model.User;
 import forum.service.CommentService;
 import forum.service.PostService;
-import forum.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,6 +27,9 @@ public class HistoryController extends HttpServlet {
         User user = (User) request.getSession().getAttribute("user");
 
         List<Post> posts = postService.readUserPostHistory(user.getUserId());
+        ColorVoteButtonHandler<Post> colorVoteButtonHandler = new ColorVoteButtonHandler<>();
+        colorVoteButtonHandler.initPublicationVoteStatus(request, posts);
+
         List<Comment> comments = commentService.readUserAllComment(user.getUserId());
 
         request.setAttribute("posts",posts);

@@ -10,6 +10,7 @@ public class Post {
     private String description;
     private String message;
     private Timestamp date;
+    private String PostVoteType = VoteType.RETURNED.name();
     private int positiveVote;
     private int negativeVote;
 
@@ -29,6 +30,14 @@ public class Post {
         this.date = new Timestamp(post.getDate().getTime());
         this.positiveVote = post.getPositiveVote();
         this.negativeVote = post.getNegativeVote();
+    }
+
+    public String getPostVoteType() {
+        return PostVoteType;
+    }
+
+    public void setPostVoteType(String postVoteType) {
+        PostVoteType = postVoteType;
     }
 
     public int getPostId() {

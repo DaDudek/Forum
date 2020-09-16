@@ -11,9 +11,23 @@
         <div class="container">
             <div class="row bs-callout bs-callout-warning">
                 <div class="col col-md-1 col-sm-2">
-                    <a href="${pageContext.request.contextPath}/comment-vote?post_id=${comment.postId}&is_positive=true&comment_id=${comment.commentId}&post-page=true&page=${requestScope.pageNumber}"" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
+                    <c:choose>
+                        <c:when test="${comment.commentVoteType eq 'POSITIVE'}">
+                            <a href="${pageContext.request.contextPath}/comment-vote?post_id=${comment.postId}&is_positive=true&comment_id=${comment.commentId}&post-page=true&page=${requestScope.pageNumber}" class="btn btn-block btn-primary my-bt-vote-up"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/comment-vote?post_id=${comment.postId}&is_positive=true&comment_id=${comment.commentId}&post-page=true&page=${requestScope.pageNumber}" class="btn btn-block btn-primary btn-success"><span class="glyphicon glyphicon-thumbs-up"></span>  </a>
+                        </c:otherwise>
+                    </c:choose>
                     <div class="well well-sm centered"><p style="text-align: center"><c:out value="${comment.positiveVote - comment.negativeVote}" /></div>
-                    <a href="${pageContext.request.contextPath}/comment-vote?post_id=${comment.postId}&is_positive=false&comment_id=${comment.commentId}&post-page=true&page=${requestScope.pageNumber}"" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
+                    <c:choose>
+                        <c:when test="${comment.commentVoteType eq 'NEGATIVE'}">
+                            <a href="${pageContext.request.contextPath}/comment-vote?post_id=${comment.postId}&is_positive=false&comment_id=${comment.commentId}&post-page=true&page=${requestScope.pageNumber}" class="btn btn-block btn-primary my-bt-vote-down"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/comment-vote?post_id=${comment.postId}&is_positive=false&comment_id=${comment.commentId}&post-page=true&page=${requestScope.pageNumber}" class="btn btn-block btn-primary btn-danger"><span class="glyphicon glyphicon-thumbs-down"></span>  </a>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
                 <div class="col col-md-11 col-sm-10">
                     <h6><small style="color:#171716">Add by: <c:out value="${comment.author}" />  date: <fmt:formatDate value="${comment.date}" pattern="dd/MM/YYYY"/></small></h6>

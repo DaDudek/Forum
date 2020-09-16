@@ -8,4 +8,7 @@ public interface CommentVoteDAO extends GenericDAO<CommentVote, Integer> {
 
     boolean removeAllCommentVotes(int commentId);
 
+    String getUserPostVoteType(int postId, int userId);
+
+
 }

@@ -1,5 +1,6 @@
 package forum.controller;
 
+import forum.logic.ColorVoteButtonHandler;
 import forum.logic.CommentResponseHandler;
 import forum.logic.PaginationHandler;
 import forum.model.Comment;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/post")
@@ -42,9 +44,17 @@ public class PostViewController extends HttpServlet {
                 response.sendError(404);
             } else {
                 List<Comment> commentInPage = paginationHandler.setPublicationOnPage(comments, pageNumber);
-                for (Comment comment : commentInPage) {
-                    commentResponseHandler.setCommentsChildren(comment);
+                ColorVoteButtonHandler<Comment> commentColorVoteButtonHandler = new ColorVoteButtonHandler<>();
+                commentColorVoteButtonHandler.initPublicationVoteStatus(request,commentInPage);
+                for (int i = 0; i < commentInPage.size(); i++) {
+                    commentResponseHandler.setCommentsChildren(request,commentInPage.get(i));
+                    commentColorVoteButtonHandler.initPublicationVoteStatus(request,commentInPage.get(i).getFirstChildrenList());
                 }
+
+                ColorVoteButtonHandler<Post> colorVoteButtonHandler = new ColorVoteButtonHandler<>();
+                List<Post> posts = new ArrayList<>();
+                posts.add(post);
+                colorVoteButtonHandler.initPublicationVoteStatus(request, posts);
                 request.setAttribute("pageNumber", pageNumber);
                 request.setAttribute("lastPageNumber",pages.size());
                 request.setAttribute("post", post);

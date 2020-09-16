@@ -60,3 +60,53 @@ body {
     margin: auto;
     width: 50%;
 }
+
+.my-bt-vote-up{
+    background-color: #006600;
+    border: #006600;
+}
+
+.my-bt-vote-down{
+    background-color:  #4d0000;
+    border-left: #4d0000;
+}
+
+.my-bt-vote-up:hover{
+    background-color:#009900;
+    border: #009900;
+}
+
+.my-bt-vote-down:hover{
+    background-color:  #b30000;
+    border-left: #b30000;
+}
+
+.my-bt-vote-up:active{
+    background-color: #006600;
+    border: #006600;
+}
+
+.my-bt-vote-down:active{
+    background-color:  #4d0000;
+    border-left: #4d0000;
+}
+
+.my-bt-vote-up:visited{
+    background-color: #006600;
+    border: #006600;
+}
+
+.my-bt-vote-down:visited{
+    background-color:  #4d0000;
+    border-left: #4d0000;
+}
+
+.my-bt-vote-up:focus{
+    background-color: #006600;
+    border: #006600;
+}
+
+.my-bt-vote-down:focus{
+    background-color:  #4d0000;
+    border-left: #4d0000;
+}

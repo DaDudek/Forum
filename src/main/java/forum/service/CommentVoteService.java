@@ -2,6 +2,7 @@ package forum.service;
 
 import forum.dao.CommentVoteDAO;
 import forum.dao.DAOFactory;
+import forum.dao.VoteDAO;
 import forum.model.CommentVote;
 import forum.model.VoteType;
 
@@ -9,6 +10,13 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 public class CommentVoteService {
+
+
+    public String getUserCommentVoteType(int commentId, int userId){
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        CommentVoteDAO commentVoteDAO = factory.getCommentVoteDAO();
+        return commentVoteDAO.getUserPostVoteType(commentId,userId);
+    }
 
     public CommentVote createOrUpdateCommentVote(int commentId, int userId, boolean isPositive){
         DAOFactory factory = DAOFactory.getDAOFactory();

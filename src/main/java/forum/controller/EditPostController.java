@@ -55,7 +55,7 @@ public class EditPostController extends HttpServlet {
             } else {
                 List<Comment> commentsInPage = paginationHandler.setPublicationOnPage(comments, pageNumber);
                 for (Comment comment : commentsInPage) {
-                    commentResponseHandler.setCommentsChildren(comment);
+                    commentResponseHandler.setCommentsChildren(request,comment);
                 }
                 request.setAttribute("post", post);
                 request.setAttribute("comments", commentsInPage);

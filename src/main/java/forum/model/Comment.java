@@ -15,6 +15,8 @@ public class Comment {
     private int parentId; // -1 if it is first comment
     private String author;
     private List<Comment> firstChildrenList;
+    private String CommentVoteType = VoteType.RETURNED.name();
+
 
     public Comment() {
     }
@@ -32,6 +34,13 @@ public class Comment {
         this.parentId = comment.getParentId();
     }
 
+    public String getCommentVoteType() {
+        return CommentVoteType;
+    }
+
+    public void setCommentVoteType(String commentVoteType) {
+        CommentVoteType = commentVoteType;
+    }
 
     public int getParentId() {
 

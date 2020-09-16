@@ -16,6 +16,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CommentVoteDAOMysql implements CommentVoteDAO {
@@ -37,6 +38,9 @@ public class CommentVoteDAOMysql implements CommentVoteDAO {
                     "WHERE comment_vote_id = :comment_vote_id";
 
     private static final String DELETE_COMMENT_ALL_VOTES = "DELETE FROM comment_vote WHERE comment_id = :comment_id";
+
+    private static final String GET_USER_POST_VOTE_TYPE = "SELECT vote_type FROM comment_vote WHERE user_id = :user_id " +
+            "AND comment_id = :comment_id ";
 
     private NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
 
@@ -104,6 +108,33 @@ public class CommentVoteDAOMysql implements CommentVoteDAO {
         map.put("comment_id", commentId);
         SqlParameterSource parameterSource = new MapSqlParameterSource(map);
         return template.update(DELETE_COMMENT_ALL_VOTES, parameterSource) > 0;
+    }
+
+    @Override
+    public String getUserPostVoteType(int postId, int userId) {
+        try{
+            if (userId == -1){
+                return VoteType.RETURNED.name();
+            }
+            Map<String, Object> map = new HashMap<>();
+            map.put("comment_id", postId);
+            map.put("user_id",userId);
+            SqlParameterSource parameterSource = new MapSqlParameterSource(map);
+            List<String> score = template.query(GET_USER_POST_VOTE_TYPE,parameterSource, new RowMapper<String>() {
+                @Override
+                public String mapRow(ResultSet resultSet, int i) throws SQLException {
+                    return resultSet.getString("vote_type");
+                }
+            });
+            if (score.size() > 0){
+                return score.get(0);
+            }
+            else {
+                return VoteType.RETURNED.name();
+            }
+        }catch (EmptyResultDataAccessException e){
+            return VoteType.RETURNED.name();
+        }
     }
 
     private class CommentVoteRowMapper implements RowMapper<CommentVote>{

@@ -1,7 +1,11 @@
 package forum.logic;
 
 import forum.model.Comment;
+import forum.model.Post;
+import forum.model.User;
+import forum.service.VoteService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,4 +46,5 @@ public class PaginationHandler<T> {
             return Integer.parseInt(pageParameter);
         }
     }
+
 }
