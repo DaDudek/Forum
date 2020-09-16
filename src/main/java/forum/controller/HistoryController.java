@@ -31,6 +31,8 @@ public class HistoryController extends HttpServlet {
         colorVoteButtonHandler.initPublicationVoteStatus(request, posts);
 
         List<Comment> comments = commentService.readUserAllComment(user.getUserId());
+        ColorVoteButtonHandler<Comment> commentColorVoteButtonHandler = new ColorVoteButtonHandler<>();
+        commentColorVoteButtonHandler.initPublicationVoteStatus(request, comments);
 
         request.setAttribute("posts",posts);
         request.setAttribute("comments", comments);

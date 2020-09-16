@@ -28,16 +28,21 @@ public class VoteController extends HttpServlet {
             int postId = Integer.parseInt(request.getParameter("post_id"));
             boolean isPositive = Boolean.parseBoolean(request.getParameter("is_positive"));
             updateVote(postId, userId, isPositive);
-            if (request.getParameter("post-page") != null) {
-                responseAdress = request.getContextPath() + "/post?post-id=" + postId+"&page="+request.getParameter("page");
-            } else {
-                if (request.getParameter("page") == null) {
-                    responseAdress = request.getContextPath() + "/";
+            boolean fromHistory = Boolean.parseBoolean(request.getParameter("history"));
+            if (fromHistory){
+                request.getRequestDispatcher("/history").forward(request,response);
+            }else {
+                if (request.getParameter("post-page") != null) {
+                    responseAdress = request.getContextPath() + "/post?post-id=" + postId + "&page=" + request.getParameter("page");
                 } else {
-                    responseAdress = request.getContextPath() + "/?page=" + request.getParameter("page");
+                    if (request.getParameter("page") == null) {
+                        responseAdress = request.getContextPath() + "/";
+                    } else {
+                        responseAdress = request.getContextPath() + "/?page=" + request.getParameter("page");
+                    }
                 }
+                response.sendRedirect(responseAdress);
             }
-            response.sendRedirect(responseAdress);
         } catch (EmptyResultDataAccessException | NumberFormatException e){
             response.sendError(403);
         }

@@ -27,7 +27,13 @@ public class CommentVoteController extends HttpServlet {
             int post_id = Integer.parseInt(request.getParameter("post_id"));
             boolean isPositive = Boolean.parseBoolean(request.getParameter("is_positive"));
             updateVote(comment_id,userId, isPositive);
-            response.sendRedirect(request.getContextPath() + "/post?post-id="+request.getParameter("post_id")+"&page="+request.getParameter("page"));
+            boolean fromHistory = Boolean.parseBoolean(request.getParameter("history"));
+            if (fromHistory){
+                request.getRequestDispatcher("/history").forward(request,response);
+            }
+            else {
+                response.sendRedirect(request.getContextPath() + "/post?post-id=" + request.getParameter("post_id") + "&page=" + request.getParameter("page"));
+            }
         } catch (NumberFormatException numberFormatException){
             response.sendError(404);
         }
