@@ -12,15 +12,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 @WebServlet("/search")
 public class SearchController extends HttpServlet {
-    public static final int HOW_MANY_POSTS_IN_ONE_PAGE = 5;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        response.sendRedirect(request.getContextPath()+"/search?sort="+request.getParameter("sort")+"&keywords="+request.getParameter("inputKeywords"));
+        response.sendRedirect(request.getContextPath()+"/search?sort="+request.getParameter("sort")+"&keywords="+ URLEncoder.encode(request.getParameter("inputKeywords"), "UTF-8"));
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
