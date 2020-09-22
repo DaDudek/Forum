@@ -14,7 +14,7 @@ public class SignInController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getUserPrincipal() != null){
-            response.sendRedirect(request.getContextPath()+ "/" + (String) request.getSession().getAttribute("url"));
+            response.sendRedirect(request.getContextPath() + (String) request.getSession().getAttribute("url"));
         }else {
             response.sendError(403);
         }

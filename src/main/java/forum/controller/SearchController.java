@@ -52,7 +52,7 @@ public class SearchController extends HttpServlet {
                     request.setAttribute("keywords",keywords);
                     request.setAttribute("pages",pages);
                     request.setAttribute("lastPageNumber",pages.size());
-                    request.getSession().setAttribute("url", "/search?sort=" + postSort + "&keywords=" + keywords+"&page="+pageNumber);
+                    request.getSession().setAttribute("url", "/search?sort=" + postSort + "&keywords=" + URLEncoder.encode(request.getParameter("keywords"), "UTF-8")+"&page="+pageNumber);
                     request.getRequestDispatcher("WEB-INF/showsearch.jsp").forward(request, response);
                 }
             } catch (IllegalArgumentException e){
