@@ -54,7 +54,7 @@ Than you need to make this query (you can use workbench in windows):
 INSERT INTO role VALUES(user);
 INSERT INTO role VALUES(admin);
 ```
-Than you need to add contet.xml to webapp\META-INF folder changing username,password and db url for youre local and its all done.
+Then you need to add contet.xml to webapp\META-INF folder changing username,password and db url for youre local and its all done.
 
 ## Status
 You can try this aplicat online using forum.mazurkiewicz.me link 
