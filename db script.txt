@@ -1,0 +1,167 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema forum
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema forum
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `forum` DEFAULT CHARACTER SET utf8 ;
+USE `forum` ;
+
+-- -----------------------------------------------------
+-- Table `forum`.`user`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `forum`.`user` (
+  `user_id` INT NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(60) NOT NULL,
+  `email` VARCHAR(60) NOT NULL,
+  `account_active` TINYINT(1) NOT NULL DEFAULT '0',
+  `password` VARCHAR(64) NOT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 12
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `forum`.`post`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `forum`.`post` (
+  `post_id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `title` VARCHAR(60) NOT NULL,
+  `description` VARCHAR(100) NOT NULL,
+  `message` VARCHAR(500) NOT NULL,
+  `date` TIMESTAMP NOT NULL,
+  `positive_vote` INT NOT NULL DEFAULT '0',
+  `negative_vote` INT NOT NULL DEFAULT '0',
+  PRIMARY KEY (`post_id`, `user_id`),
+  UNIQUE INDEX `idpost_UNIQUE` (`post_id` ASC) VISIBLE,
+  INDEX `fk_post_user_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_post_user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `forum`.`user` (`user_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 30
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `forum`.`comment`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `forum`.`comment` (
+  `comment_id` INT NOT NULL AUTO_INCREMENT,
+  `post_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  `date` TIMESTAMP NOT NULL,
+  `message` VARCHAR(500) NOT NULL,
+  `positive_vote` INT NULL DEFAULT '0',
+  `negative_vote` INT NULL DEFAULT '0',
+  `parent_id` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`comment_id`, `post_id`, `user_id`),
+  INDEX `fk_user_has_post_post2_idx` (`post_id` ASC) VISIBLE,
+  INDEX `fk_user_has_post_user2_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_user_has_post_post2`
+    FOREIGN KEY (`post_id`)
+    REFERENCES `forum`.`post` (`post_id`),
+  CONSTRAINT `fk_user_has_post_user2`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `forum`.`user` (`user_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 101
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `forum`.`comment_vote`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `forum`.`comment_vote` (
+  `comment_vote_id` INT NOT NULL AUTO_INCREMENT,
+  `comment_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  `date` TIMESTAMP NULL DEFAULT NULL,
+  `is_positive` TINYINT(1) NULL DEFAULT NULL,
+  `vote_type` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`comment_vote_id`, `comment_id`, `user_id`),
+  INDEX `fk_user_has_comment_comment1_idx` (`comment_id` ASC) VISIBLE,
+  INDEX `fk_user_has_comment_user1_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_user_has_comment_comment1`
+    FOREIGN KEY (`comment_id`)
+    REFERENCES `forum`.`comment` (`comment_id`),
+  CONSTRAINT `fk_user_has_comment_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `forum`.`user` (`user_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 26
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `forum`.`role`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `forum`.`role` (
+  `role_name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`role_name`),
+  UNIQUE INDEX `role_name_UNIQUE` (`role_name` ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `forum`.`user_role`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `forum`.`user_role` (
+  `role_name` VARCHAR(45) NOT NULL DEFAULT 'user',
+  `username` VARCHAR(60) NOT NULL,
+  PRIMARY KEY (`role_name`, `username`),
+  INDEX `fk_role_has_user_user1_idx` (`username` ASC) VISIBLE,
+  INDEX `fk_role_has_user_role1_idx` (`role_name` ASC) VISIBLE,
+  CONSTRAINT `fk_role_has_user_role1`
+    FOREIGN KEY (`role_name`)
+    REFERENCES `forum`.`role` (`role_name`),
+  CONSTRAINT `fk_role_has_user_user1`
+    FOREIGN KEY (`username`)
+    REFERENCES `forum`.`user` (`username`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `forum`.`vote`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `forum`.`vote` (
+  `vote_id` INT NOT NULL AUTO_INCREMENT,
+  `post_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  `date` TIMESTAMP NOT NULL,
+  `is_positive` TINYINT(1) NOT NULL,
+  `vote_type` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`vote_id`, `post_id`, `user_id`),
+  INDEX `fk_user_has_post_post1_idx` (`post_id` ASC) VISIBLE,
+  INDEX `fk_user_has_post_user1_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_user_has_post_post1`
+    FOREIGN KEY (`post_id`)
+    REFERENCES `forum`.`post` (`post_id`),
+  CONSTRAINT `fk_user_has_post_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `forum`.`user` (`user_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 23
+DEFAULT CHARACTER SET = utf8;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
