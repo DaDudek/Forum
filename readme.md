@@ -23,14 +23,14 @@ You can:
 You can easly transform this template for some specific topic forum like car's or music forum
 
 ## Screenshots
-![home page](./img/1.png)
-![post page](./img/2.png)
-![sign on page](./img/3.png)
+![home page](./images/1.png)
+![post page](./images/2.png)
+![sign on page](./images/3.png)
 
 ## Technologies
-* Java - version 13.0
-* Java ee - version 2.0
-* Maven - version 3.0
+* Java 
+* Java ee 
+* Maven 
 * Bootstrap
 * MySQL
 * Tomcat server 
