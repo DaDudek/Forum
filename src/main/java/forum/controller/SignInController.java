@@ -13,10 +13,14 @@ public class SignInController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getUserPrincipal() != null){
-            response.sendRedirect(request.getContextPath() + (String) request.getSession().getAttribute("url"));
-        }else {
-            response.sendError(403);
+        if (request.getParameter("page") != null) {
+            response.sendRedirect(request.getContextPath() + "/");
+        } else {
+            if (request.getUserPrincipal() != null) {
+                response.sendRedirect(request.getContextPath() + (String) request.getSession().getAttribute("url"));
+            } else {
+                response.sendError(403);
+            }
         }
     }
 }
